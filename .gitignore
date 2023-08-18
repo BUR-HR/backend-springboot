@@ -61,6 +61,7 @@ local.properties
 
 # sbteclipse plugin
 .target/
+target/
 
 # Tern plugin
 .tern-project
@@ -265,3 +266,10 @@ sketch
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/react,intellij,visualstudiocode,eclipse,java
+target/classes/application.properties
+target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst
+target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst
+target/surefire-reports/com.bubblebubble.hr.BurHrApplicationTests.txt
+target/surefire-reports/TEST-com.bubblebubble.hr.BurHrApplicationTests.xml
