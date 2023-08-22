@@ -74,14 +74,5 @@ public class Employee {
     @JoinColumn(name = "EMP_NO")
     private List<EmployeeRole> employeeRole;
 
-    @Override
-    public String toString() {
-        return "Employee [empNo=" + empNo + ", empName=" + empName + ", deptCode =" + deptCode
-                + ", jobCode=" + jobCode + ", employeeRsdn=" + employeeRsdn + ", employeeEmail="
-                + employeeEmail + ", employeePassword=" + employeePassword + ", hireDate=" + hireDate
-                + ", employeePhone=" + employeePhone + ", employeeAddress=" + employeeAddress +
-                ", payrollAccount=" + payrollAccount + ", isEmployed=" + isEmployed + ", employeeStatus="
-                + employeeStatus + ", employeeGender=" + employeeGender + ", leaveDate=" + leaveDate +
-                ", employeeRoles=" + employeeRole + "]";
-        }
+
     }

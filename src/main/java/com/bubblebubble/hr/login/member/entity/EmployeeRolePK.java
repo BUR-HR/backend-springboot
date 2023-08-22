@@ -13,5 +13,5 @@ public class EmployeeRolePK implements Serializable {
 
     private int empNo;
 
-    private int authrityCode;
+    private int authorityCode;
 }

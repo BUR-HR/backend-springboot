@@ -20,8 +20,14 @@ public class MemberService {
         this.modelMapper = modelMapper;
     }
 
-    public EmployeeDTO selectMyInfo(String memberId) {
-        log.info("[MemberService] selectMyInfo");
+    public EmployeeDTO selectMyInfo(String empNo) {
+        log.info("[MemberService] selectMyInfo Start ================= ");
+
+        int empNoInt = Integer.parseInt(empNo); // empNo 값을 정수로 변환
+        Employee employee = memberRepository.findByEmpNo(empNoInt);
+        log.info("[MemberService] {} ============ ", employee);
+        log.info("[MemberService] selectMyInfo End ============ ");
+        return modelMapper.map(employee, EmployeeDTO.class);
     }
 
 

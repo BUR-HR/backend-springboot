@@ -36,23 +36,23 @@ public class AuthService {
     }
 
     // 로그인 작업 수행
-    public Object login(EmployeeDTO memberDTO) { // MemberDTO 객체로 받은 로그인 정보를 처리
+    public Object login(EmployeeDTO employeeDTO) { // MemberDTO 객체로 받은 로그인 정보를 처리
 
         log.info("[AuthService] login Start ==================================");
-        log.info("[AuthService] {} ================== ", memberDTO);
+        log.info("[AuthService] {} ================== ", employeeDTO);
         /* 1. 아이디 조회 */
-        Employee employee = memberRepository.findByEmployeeNo(memberDTO.getEmpNo());
+        Employee employee = memberRepository.findByEmpNo(employeeDTO.getEmpNo());
 
         log.info("[AuthService] member 조회 {} ================== ", employee);
 
         if (employee == null) {
-            throw new LoginFailedException(memberDTO.getEmpNo() + "를 찾을 수 없습니다.");
+            throw new LoginFailedException(employeeDTO.getEmpNo() + "를 찾을 수 없습니다.");
         }
 
         /* 2. 비밀번호 매칭
          * passwordEncoder.matches(평문, 다이제스트)
          * */
-        if (!passwordEncoder.matches(EmployeeDTO.getEmployeePassword(), employee.getEmployeePassword())) {
+        if (!passwordEncoder.matches(employeeDTO.getEmployeePassword(), employee.getEmployeePassword())) {
             log.info("[AuthService] Password Match Fail! ");
             throw new LoginFailedException("잘못된 비밀번호 입니다.");
         }

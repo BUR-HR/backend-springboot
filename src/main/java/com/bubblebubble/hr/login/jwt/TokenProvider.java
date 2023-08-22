@@ -38,8 +38,8 @@ public class TokenProvider {
     private final UserDetailsService userDetailsService;
     public TokenProvider(@Value("${jwt.secret}") String secretKey, UserDetailsService userDetailsService){
 
-        byte[] keyBytest = Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(keyBytest);
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
         this.userDetailsService = userDetailsService;
     }
 

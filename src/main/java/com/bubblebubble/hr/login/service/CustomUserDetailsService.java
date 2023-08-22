@@ -33,11 +33,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String empNo) throws UsernameNotFoundException{
 
-        Employee employee = memberRepository.findByEmployeeNo(empNo);
-        EmployeeDTO employeeDTO = ModelMapper.map(employee, EmployeeDTO.class);
+        Employee employee = memberRepository.findByEmpNo(Integer.parseInt(empNo));
+        EmployeeDTO employeeDTO = modelMapper.map(employee, EmployeeDTO.class);
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for(EmployeeRole employeeRole : employee.getEmployeeRoles()){
+        for(EmployeeRole employeeRole : employee.getEmployeeRole()){
             String authorityName = employeeRole.getAuthority().getAuthName();
             authorities.add(new SimpleGrantedAuthority(authorityName));
         }
