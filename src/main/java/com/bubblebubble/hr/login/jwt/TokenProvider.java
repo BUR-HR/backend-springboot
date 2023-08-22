@@ -54,7 +54,8 @@ public class TokenProvider {
         log.info("[TokenProvider] authorites {} ", roles);
 
        // 회원 아이디를 "sub"라는 클레임으로 토큰에 추가
-        Claims claims = Jwts.claims().setSubject(employee.getEmpNo());
+        Claims claims = Jwts.claims().setSubject(String.valueOf(employee.getEmpNo()));
+
 
         // 회원의 권한을 "auth"라는 클레임으로 토큰에 추가
         claims.put(AUTHORITIES_KEY,roles);
@@ -92,6 +93,8 @@ public class TokenProvider {
                 throw new RuntimeException("권한 정보가 없는 토큰입니다.");
             }
 
+            String empNo = claims.getSubject();
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(this.getEmpNo(token));
             log.info("[TokenProvider] ======================= {}", userDetails.getAuthorities());
 
@@ -100,7 +103,7 @@ public class TokenProvider {
         }
 
         // 4. 토큰 유효성 검사
-        public boolean vaildateToken(String token){
+        public boolean validateToken(String token){
 
             try {
                 Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
