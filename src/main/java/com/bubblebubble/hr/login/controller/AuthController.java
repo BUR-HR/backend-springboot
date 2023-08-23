@@ -29,7 +29,7 @@ public class AuthController {
 
 
         return ResponseEntity
-                .ok()
+                .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(HttpStatus.OK, "로그인 성공", authService.login(memberDTO)));
     }
 
