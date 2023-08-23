@@ -74,7 +74,7 @@ public class SecurityConfig {
                 .antMatchers("/api/v1/reviews/**").permitAll()
                 //                .antMatchers("/api/**").hasRole("USER")   // ROLE_USER
                 //                .antMatchers("/api/**").hasRole("ADMIN")
-                .antMatchers("/api/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/api/**").hasAnyRole("HR_EMPLOYEE", "EMPLOYEE", "PAYROLL")
                 // .anyRequest().permitAll()  // 어떤 요청이든 허용 가능, 구현전에 추가해보기
                 .and()
 
