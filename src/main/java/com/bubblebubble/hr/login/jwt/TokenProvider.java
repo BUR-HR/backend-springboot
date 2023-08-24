@@ -73,6 +73,7 @@ public class TokenProvider {
         return new TokenDTO(BEARER_TYPE, employee.getEmpName(), accessToken, accessTokenExpriesIn.getTime());
         }
 
+
         // 2. 토큰의 등록된 클레임의 subject에서 해당 회원의 아이디 추출
         public String getEmpNo(String token) {
             return Jwts.parserBuilder()
@@ -122,6 +123,8 @@ public class TokenProvider {
                 throw new TokenException("JWT 토큰이 잘못되었습니다.");
             }
         }
+
+
 
     // 5. AccessToken에서 클레임 추출하는 메소드
     private Claims parseClaims(String token){

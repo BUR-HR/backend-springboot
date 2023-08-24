@@ -70,8 +70,6 @@ public class SecurityConfig {
                 // options 메소드로 사전 요청을 보내게된다.
                 // 사전에 요청이 안전한지 확인하기 위함이다(유효한지 서버에 미리 파악할 수 있도록 보내는 수단을 의미)
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/api/v1/products/**").permitAll()
-                .antMatchers("/api/v1/reviews/**").permitAll()
                 //                .antMatchers("/api/**").hasRole("USER")   // ROLE_USER
                 //                .antMatchers("/api/**").hasRole("ADMIN")
                 .antMatchers("/api/**").hasAnyRole("USER", "ADMIN")
@@ -94,7 +92,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));  // 어느 도메인에서 온 요청을 허용할 것인지를 지정
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:3001"));  // 어느 도메인에서 온 요청을 허용할 것인지를 지정
         configuration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "DELETE")); // 어떤 HTTP 메서드를 사용한 요청을 허용할 것인지를 지정
         configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Content-type" // 어떤 HTTP 헤더를 사용한 요청을 허용할 것인지를 지정
                 , "Access-Control-Allow-Headers", "Authorization"
