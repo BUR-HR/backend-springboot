@@ -62,24 +62,18 @@ public class SecurityConfig {
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)//  필요한 권한 없이 접근(403)
                 .accessDeniedHandler(jwtAccessDeniedHandler)          // 유효한 자격 증명 없을 시(401)
                 .and()
+                // 권한
                 .authorizeRequests()
-                .antMatchers("/").authenticated()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()   // cors를 위해 preflight 요청 처리용 option요청 허용
-                // preflight란?
-                // 요청할 url의 외부 도메인일 경우 웹 브라우저에서 자체 실행되며
-                // options 메소드로 사전 요청을 보내게된다.
-                // 사전에 요청이 안전한지 확인하기 위함이다(유효한지 서버에 미리 파악할 수 있도록 보내는 수단을 의미)
-                .antMatchers("/auth/**").permitAll()
-                //                .antMatchers("/api/**").hasRole("USER")   // ROLE_USER
-                //                .antMatchers("/api/**").hasRole("ADMIN")
-                .antMatchers("/api/**").hasAnyRole("USER", "ADMIN")
-                // .anyRequest().permitAll()  // 어떤 요청이든 허용 가능, 구현전에 추가해보기
+                    // 인사카드 등록 페이지 권한(관리자or인사팀장만 접근 및 등록 가능)
+//                    .antMatchers("/api/employees/register").hasAnyRole("ROLE_ADMIN", "ROLE_HR_LEADER")
+                    .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()   // cors를 위해 preflight 요청 처리용 option요청 허용
+                    .antMatchers("/login").permitAll() // 로그인 페이지 모든 사용자 접근 허용
+//                    .anyRequest().authenticated() // 모든 요청에 대해 인증 필요(ex.로그인한 사용자만 접근)
                 .and()
-
                 /* 세션 인증 방식을 쓰지 않겠다는 설정 */
                 // JWT 토큰 방식을 사용하므로 세션을 사용하지 않도록 설정
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .cors()
                 .and()
