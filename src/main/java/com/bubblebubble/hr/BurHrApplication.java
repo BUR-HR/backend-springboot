@@ -10,5 +10,4 @@ public class BurHrApplication {
         SpringApplication.run(BurHrApplication.class, args);
     }
 
-
 }
