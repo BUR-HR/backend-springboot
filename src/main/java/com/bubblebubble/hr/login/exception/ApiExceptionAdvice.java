@@ -1,6 +1,7 @@
 package com.bubblebubble.hr.login.exception;
 
 
+import com.bubblebubble.hr.attendance.controller.AttendanceInfoNotFoundException;
 import com.bubblebubble.hr.login.exception.dto.ApiExceptionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,11 @@ public class ApiExceptionAdvice {
     public ResponseEntity<ApiExceptionDTO> exceptionHandler(DuplicatedMemberEmailException e){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ApiExceptionDTO(HttpStatus.BAD_REQUEST, e.getMessage()));
+    }
+
+    @ExceptionHandler(AttendanceInfoNotFoundException.class)
+    public ResponseEntity<ApiExceptionDTO> exceptionHandler(AttendanceInfoNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(new ApiExceptionDTO(HttpStatus.NOT_FOUND, e.getMessage()));
     }
 }

@@ -1,11 +1,11 @@
 package com.bubblebubble.hr.login.config;
 
 
-import com.bubblebubble.hr.login.jwt.JwtAccessDeniedHandler;
-import com.bubblebubble.hr.login.jwt.JwtAuthenticationEntryPoint;
-import com.bubblebubble.hr.login.jwt.TokenProvider;
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -16,10 +16,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
+import com.bubblebubble.hr.login.jwt.JwtAccessDeniedHandler;
+import com.bubblebubble.hr.login.jwt.JwtAuthenticationEntryPoint;
+import com.bubblebubble.hr.login.jwt.TokenProvider;
 
 //  Spring Security를 설정하는 SecurityConfig 클래스입니다. 이 클래스에서는 보안과 관련된 다양한 설정을 수행
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final TokenProvider tokenProvider;

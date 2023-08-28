@@ -1,14 +1,19 @@
 package com.bubblebubble.hr.attendance.service;
 
-import java.util.Date;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bubblebubble.hr.attendance.controller.AttendanceInfoNotFoundException;
 import com.bubblebubble.hr.attendance.dto.AttendanceDTO;
 import com.bubblebubble.hr.attendance.entity.Attendance;
 import com.bubblebubble.hr.attendance.repository.AttendanceRepository;
@@ -26,52 +31,65 @@ public class AttendanceService {
         this.attendanceRepository = attendanceRepository;
         this.modelMapper = modelMapper;
     }
-    
+
     @Transactional
-    public List<AttendanceDTO> insertAttendanceTime(AttendanceDTO attendanceDTO) throws Exception {
-        log.info("[AttendanceService] start =========================");
-        
-        try {
-            attendanceRepository.saveAndFlush(Attendance.create(attendanceDTO));
-            List<Attendance> attendanceList = attendanceRepository.findByEmpNoOrderByNoDesc(attendanceDTO.getEmpNo());
-            
-            
-            log.info("[AttendanceService] {}", attendanceList);
-            log.info("[AttendanceService] start =========================");
-            return attendanceList.stream().map(item -> modelMapper.map(item, AttendanceDTO.class)).collect(Collectors.toList());
-        } catch (Exception e) {
-            e.getStackTrace();
-            throw new Exception();
-        }
+    public AttendanceDTO insertStartDateTime(AttendanceDTO requestAttendanceDTO) {
+        log.info("[AttendanceService] insertStartDateTime start =========================");
+        log.info("[AttendanceService] {}", requestAttendanceDTO);
+
+        Attendance savedAttendance = attendanceRepository.save(Attendance.create(requestAttendanceDTO));
+
+        log.info("[AttendanceService] {}", savedAttendance);
+        log.info("[AttendanceService] insertStartDateTime end =========================");
+        return modelMapper.map(savedAttendance, AttendanceDTO.class);
     }
 
     @Transactional
-    public void insertLeaveTime(AttendanceDTO attendanceDTO) {
-        try {
-            Optional<Attendance> attendance = attendanceRepository.findByEmpNoAndWorkDate(
-                attendanceDTO.getEmpNo(),
-                attendanceDTO.getWorkDate()
-            );
-            
-            if (!attendance.isPresent()) {
+    public AttendanceDTO updateEndDateTime(AttendanceDTO attendanceDTO) throws AttendanceInfoNotFoundException {
+        log.info("[AttendanceService] updateEndDateTime start =========================");
 
-                throw new AttendanceInfoNotFoundException("출근 정보가 존재하지 않습니다."); 
-            }
+        Attendance attendance = attendanceRepository.findTopByEmpNoAndEndDateTimeIsNull(attendanceDTO.getEmpNo())
+                .orElseThrow(() -> new AttendanceInfoNotFoundException("출근 정보가 존재하지 않습니다."));
 
-            attendance.get().setLeaveWorkDate(attendanceDTO.getLeaveWorkDate());
+        attendance.setEndDateTime(attendanceDTO.getEndDateTime());
+        attendance.setAttendanceType(attendanceDTO.getAttendanceType());
+        LocalDateTime startDateTime = attendance.getStartDateTime();
+        LocalDateTime endDateTime = attendance.getEndDateTime();
+        LocalDateTime startTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(9, 0, 0));
 
-            Date startDate = attendance.get().getWorkDate();
-            Date endDate = attendance.get().getLeaveWorkDate();
-            long elapsedTimeHours = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60);
-
-            if (elapsedTimeHours > 9) {
-                attendance.get().setOvertime((int) (elapsedTimeHours - 9));
-            }
-
-            attendanceRepository.saveAndFlush(attendance.get());
-        } catch (Exception e) {
-            e.getStackTrace();
+        if (startDateTime.isAfter(startTime)) {
+            startTime = startDateTime;
         }
+
+        Duration duration = Duration.between(startTime, endDateTime);
+
+        // 시간 차이를 시간 단위로 얻기
+        long elapsedTimeHours = duration.toHours();
+
+        if (elapsedTimeHours > 9) {
+            attendance.setOverTime(elapsedTimeHours - 9);
+        }
+
+        log.info("[AttendanceService] updateEndDateTime end =========================");
+        return modelMapper.map(attendance, AttendanceDTO.class);
     }
 
+    public List<AttendanceDTO> getPrivateAttendanceList(int empNo) {
+
+        List<Attendance> attendanceList = attendanceRepository.findByEmpNo(empNo);
+
+        return attendanceList.stream().map(attendance -> modelMapper.map(attendance, AttendanceDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    public AttendanceDTO getPrivateAttendanceStatus(int empNo) throws AttendanceInfoNotFoundException {
+        LocalDateTime startDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0));
+        LocalDateTime endDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59));
+
+        Attendance attendance = attendanceRepository
+                .findTopByEmpNoAndStartDateTimeBetween(empNo, startDateTime, endDateTime)
+                .orElseThrow(() -> new AttendanceInfoNotFoundException("출근 정보가 존재하지 않습니다."));
+
+        return modelMapper.map(attendance, AttendanceDTO.class);
+    }
 }

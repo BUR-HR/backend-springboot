@@ -1,5 +1,6 @@
 package com.bubblebubble.hr.attendance.entity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -19,16 +20,12 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "TBL_ATTENDANCE")
-@SequenceGenerator(
-    name = "SEQ_ATTENDANCE",
-    sequenceName = "SEQ_ATTENDANCE_NO",
-    initialValue = 1, allocationSize = 1
-)
+@SequenceGenerator(name = "SEQ_ATTENDANCE", sequenceName = "SEQ_ATTENDANCE_NO", initialValue = 1, allocationSize = 1)
 @NoArgsConstructor
 @Getter
 @ToString
 public class Attendance {
-    
+
     @Id
     @GeneratedValue(generator = "SEQ_ATTENDANCE", strategy = GenerationType.SEQUENCE)
     @Column(name = "ATTENDANCE_NO")
@@ -37,39 +34,55 @@ public class Attendance {
     @Column(name = "EMP_NO")
     private int empNo;
 
-    @Column(name = "WORK_DATE")
-    private Date workDate;
+    @Column(name = "START_DATETIME")
+    private LocalDateTime startDateTime;
 
-    @Column(name = "LEAVE_WORK_DATE")
-    private Date leaveWorkDate;
+    @Column(name = "END_DATETIME")
+    private LocalDateTime endDateTime;
 
-    @Column(name = "OVERTIME")
-    private int overtime;
+    @Column(name = "OVER_TIME")
+    private long overTime;
+
+    @Column(name = "WORK_TIME")
+    private long workTime;
+
+    @Column(name = "ATTENDANCE_TYPE")
+    private String attendanceType;
 
     @Builder
-    public Attendance(int no, int empNo, Date workDate, Date leaveWorkDate, int overtime) {
+    public Attendance(int no, int empNo, LocalDateTime startDateTime, LocalDateTime endDateTime, long overTime, long workTime, String attendanceType) {
         this.no = no;
         this.empNo = empNo;
-        this.workDate = workDate;
-        this.leaveWorkDate = leaveWorkDate;
-        this.overtime = overtime;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.overTime = overTime;
+        this.workTime = workTime;
+        this.attendanceType = attendanceType;
     }
+
+
 
     public static Attendance create(AttendanceDTO attendanceDTO) {
         return Attendance.builder()
-            .no(attendanceDTO.getNo())
-            .empNo(attendanceDTO.getEmpNo())
-            .workDate(attendanceDTO.getWorkDate())
-            .leaveWorkDate(attendanceDTO.getLeaveWorkDate())
-            .overtime(attendanceDTO.getOvertime())
-            .build();
+                .no(attendanceDTO.getNo())
+                .empNo(attendanceDTO.getEmpNo())
+                .startDateTime(attendanceDTO.getStartDateTime())
+                .endDateTime(attendanceDTO.getEndDateTime())
+                .overTime(attendanceDTO.getOverTime())
+                .workTime(attendanceDTO.getWorkTime())
+                .attendanceType(attendanceDTO.getAttendanceType())
+                .build();
     }
 
-    public void setLeaveWorkDate(Date leaveWorkDate) {
-        this.leaveWorkDate = leaveWorkDate;
+    public void setEndDateTime(LocalDateTime endDateTime) {
+        this.endDateTime = endDateTime;
     }
 
-    public void setOvertime(int overtime) {
-        this.overtime = overtime;
+    public void setOverTime(long overTime) {
+        this.overTime = overTime;
+    }
+
+    public void setAttendanceType(String attendanceType) {
+        this.attendanceType = attendanceType;
     }
 }
