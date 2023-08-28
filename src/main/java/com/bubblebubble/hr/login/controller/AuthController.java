@@ -3,7 +3,9 @@ package com.bubblebubble.hr.login.controller;
 
 import com.bubblebubble.hr.login.common.ResponseDTO;
 import com.bubblebubble.hr.login.dto.EmployeeDTO;
+import com.bubblebubble.hr.login.exception.TokenException;
 import com.bubblebubble.hr.login.service.AuthService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
+@Slf4j
 public class AuthController {
 
     private final AuthService authService;
@@ -26,11 +29,14 @@ public class AuthController {
      * */
     @PostMapping("/login")
     public ResponseEntity<ResponseDTO> login(@RequestBody EmployeeDTO memberDTO){
-
+        log.info("[login] start =========");
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDTO(HttpStatus.OK, "로그인 성공", authService.login(memberDTO)));
     }
+
+
+
 
 }

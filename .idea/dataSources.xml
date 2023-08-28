@@ -9,12 +9,12 @@
       <jdbc-url>jdbc:oracle:thin:@oracle.coffit.today:1521:XE</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="@LOCAL_BUL_HR" uuid="2ad3b95b-9f08-46b6-bff1-d26398e4e988">
+    <data-source source="LOCAL" name="@oracle.coffit.today" uuid="e1535383-b482-4518-bbf1-7aacf55933e1">
       <driver-ref>oracle.19</driver-ref>
       <synchronize>true</synchronize>
       <auto-commit>false</auto-commit>
       <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
-      <jdbc-url>jdbc:oracle:thin:@localhost:1521:XE</jdbc-url>
+      <jdbc-url>jdbc:oracle:thin:@oracle.coffit.today:1521:XE</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
