@@ -73,18 +73,18 @@ public class AttendanceController {
     }
 
     @PutMapping("/end")
-    public ResponseEntity<?> insertLeaveTime(@AuthenticationPrincipal EmployeeDTO employee)
+    public ResponseEntity<?> updateEndDateTime(@AuthenticationPrincipal EmployeeDTO employee)
             throws AttendanceInfoNotFoundException {
-        log.info("[AttendanceController] insertLeaveTime start =========================");
+        log.info("[AttendanceController] updateEndDateTime start =========================");
         
         AttendanceDTO requestAttendanceDTO = new AttendanceDTO();
         requestAttendanceDTO.setEmpNo(employee.getEmpNo());
         requestAttendanceDTO.setEndDateTime(LocalDateTime.now());
         requestAttendanceDTO.setAttendanceType(AttendanceType.COMPLETE.value());
-        log.info("[AttendanceController] insertLeaveTime {}", requestAttendanceDTO);
+        log.info("[AttendanceController] updateEndDateTime {}", requestAttendanceDTO);
         AttendanceDTO attendanceDTO = attendanceService.updateEndDateTime(requestAttendanceDTO);
         
-        log.info("[AttendanceController] insertLeaveTime start =========================");
+        log.info("[AttendanceController] updateEndDateTime start =========================");
         return ResponseEntity.ok().body(attendanceDTO);
     }
 }
