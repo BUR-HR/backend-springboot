@@ -2,11 +2,11 @@ package com.bubblebubble.hr.attendance.dto;
 
 import java.time.LocalDateTime;
 
+import com.bubblebubble.hr.login.dto.EmployeeDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Column;
 
 @Data
 @NoArgsConstructor
@@ -25,4 +25,6 @@ public class AttendanceDTO {
     private long workTime;
 
     private String attendanceType;
+
+    private EmployeeDTO employee;
 }

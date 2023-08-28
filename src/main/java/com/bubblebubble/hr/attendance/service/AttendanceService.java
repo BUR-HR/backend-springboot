@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -67,29 +65,42 @@ public class AttendanceService {
         long elapsedTimeHours = duration.toHours();
 
         if (elapsedTimeHours > 9) {
+            attendance.setWorkTime(8);
             attendance.setOverTime(elapsedTimeHours - 9);
+        } else {
+            attendance.setWorkTime(elapsedTimeHours);
         }
 
         log.info("[AttendanceService] updateEndDateTime end =========================");
         return modelMapper.map(attendance, AttendanceDTO.class);
     }
-
+    
     public List<AttendanceDTO> getPrivateAttendanceList(int empNo) {
-
-        List<Attendance> attendanceList = attendanceRepository.findByEmpNo(empNo);
-
+        log.info("[AttendanceService] getPrivateAttendanceList start =========================");
+        
+        List<Attendance> attendanceList = attendanceRepository.findByEmpNoOrderByNoDesc(empNo);
+        
+        log.info("[AttendanceService] getPrivateAttendanceList end =========================");
         return attendanceList.stream().map(attendance -> modelMapper.map(attendance, AttendanceDTO.class))
-                .collect(Collectors.toList());
+        .collect(Collectors.toList());
     }
-
+    
     public AttendanceDTO getPrivateAttendanceStatus(int empNo) throws AttendanceInfoNotFoundException {
+        log.info("[AttendanceService] getPrivateAttendanceStatus start =========================");
         LocalDateTime startDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0, 0));
         LocalDateTime endDateTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23, 59, 59));
-
+        
         Attendance attendance = attendanceRepository
-                .findTopByEmpNoAndStartDateTimeBetween(empNo, startDateTime, endDateTime)
-                .orElseThrow(() -> new AttendanceInfoNotFoundException("출근 정보가 존재하지 않습니다."));
-
+        .findTopByEmpNoAndStartDateTimeBetween(empNo, startDateTime, endDateTime)
+        .orElseThrow(() -> new AttendanceInfoNotFoundException("출근 정보가 존재하지 않습니다."));
+        
+        log.info("[AttendanceService] getPrivateAttendanceStatus end =========================");
         return modelMapper.map(attendance, AttendanceDTO.class);
+    }
+
+    public List<AttendanceDTO> getAttendanceList() {
+        List<Attendance> attendanceList = attendanceRepository.findAll();
+
+        return attendanceList.stream().map(item -> modelMapper.map(item, AttendanceDTO.class)).collect(Collectors.toList());
     }
 }

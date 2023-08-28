@@ -1,17 +1,19 @@
 package com.bubblebubble.hr.attendance.entity;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import com.bubblebubble.hr.attendance.dto.AttendanceDTO;
+import com.bubblebubble.hr.login.member.entity.Employee;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -49,6 +51,10 @@ public class Attendance {
     @Column(name = "ATTENDANCE_TYPE")
     private String attendanceType;
 
+    @ManyToOne
+    @JoinColumn(name = "EMP_NO", insertable = false, updatable = false)
+    private Employee employee;
+
     @Builder
     public Attendance(int no, int empNo, LocalDateTime startDateTime, LocalDateTime endDateTime, long overTime, long workTime, String attendanceType) {
         this.no = no;
@@ -78,6 +84,7 @@ public class Attendance {
         this.endDateTime = endDateTime;
     }
 
+    public void setWorkTime(long workTime) { this.workTime = workTime; }
     public void setOverTime(long overTime) {
         this.overTime = overTime;
     }
