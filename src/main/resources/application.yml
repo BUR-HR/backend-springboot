@@ -35,3 +35,11 @@ jwt:
 logging:
   level:
     root: info
+
+# 파일
+image:
+  add-resource-locations: classpath:/static/fileimgs/
+  add-resource-handler: /fileimgs/**
+
+  image-dir: src/main/resources/static/fileimgs
+  image-url: http://localhost:8080/fileimgs

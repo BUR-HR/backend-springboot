@@ -70,7 +70,9 @@ public class SecurityConfig {
 //                    .antMatchers("/api/employees/register").hasAnyRole("ROLE_ADMIN", "ROLE_HR_LEADER")
                     .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()   // cors를 위해 preflight 요청 처리용 option요청 허용
                     .antMatchers("/auth/login").permitAll() // 로그인 페이지 모든 사용자 접근 허용
+                    .antMatchers("/api/file/fileimgs").permitAll()
                     .anyRequest().authenticated() // 모든 요청에 대해 인증 필요(ex.로그인한 사용자만 접근)
+
                 .and()
 
                 /* 세션 인증 방식을 쓰지 않겠다는 설정 */

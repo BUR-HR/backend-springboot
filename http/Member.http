@@ -9,3 +9,12 @@ Access-Control-Allow-Origin: *
   "employeePassword": "1234"
 }
 
+### 회원가입
+POST  http://localhost:8080/api/file/register
+Accept: */*
+Access-Control-Allow-Origin: *
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6WyJST0xFX0FETUlOIiwiUk9MRV9FTVBMT1lFRSIsIlJPTEVfSFJfRU1QTE9ZRUUiLCJST0xFX1BBWVJPTEwiXSwiZXhwIjoxNjkzMzkyMDM5fQ.26mDYnuO7P_yAVxR-HkzuDBPlOqBfFwMjmC5JEdSFBCnMwvL6t805xldkWcCFZW0HhKRhfwPtt1UAl3vQsgWuA
+
+{
+"empName":"홍길동"
+}
