@@ -1,5 +1,6 @@
 package com.bubblebubble.hr.login.controller;
 
+import com.bubblebubble.hr.employee.service.EmpcardService;
 import com.bubblebubble.hr.login.common.ResponseDTO;
 import com.bubblebubble.hr.login.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;

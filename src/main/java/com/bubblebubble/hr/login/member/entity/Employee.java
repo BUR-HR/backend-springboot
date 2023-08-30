@@ -1,6 +1,7 @@
 package com.bubblebubble.hr.login.member.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -58,8 +59,8 @@ public class Employee {
     @Column(name = "PAYROLL_ACCOUNT")
     private String payrollAccount;
 
-    @Column(name = "IS_EMPLOYED")
-    private boolean isEmployed;
+    @Column(name = "IS_EMPLOYED", columnDefinition = "Y")
+    private Character isEmployed;
 
     @Column(name = "STATUS")
     private String employeeStatus;
@@ -74,5 +75,11 @@ public class Employee {
     @JoinColumn(name = "EMP_NO")
     private List<EmployeeRole> employeeRole;
 
-
+    public Employee( String employeePassword) {
+        this.employeePassword = employeePassword;
     }
+
+    public void setPassword(String password) {
+        this.employeePassword = password;
+    }
+}

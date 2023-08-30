@@ -35,7 +35,7 @@ public class EmployeeDTO implements UserDetails {
 
     private String payrollAcoount;
 
-    private boolean isEmployed;
+    private Character isEmployed;
 
     private String employeeStatus;
 
