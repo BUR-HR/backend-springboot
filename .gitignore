@@ -274,6 +274,4 @@ target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputF
 target/surefire-reports/com.bubblebubble.hr.BurHrApplicationTests.txt
 target/surefire-reports/TEST-com.bubblebubble.hr.BurHrApplicationTests.xml
 
-application.yml
-application-local.yml
-application-remote.yml
+*.yml
