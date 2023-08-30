@@ -31,7 +31,7 @@ public class ApiExceptionAdvice {
 
     @ExceptionHandler(AttendanceInfoNotFoundException.class)
     public ResponseEntity<ApiExceptionDTO> exceptionHandler(AttendanceInfoNotFoundException e) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body(new ApiExceptionDTO(HttpStatus.NOT_FOUND, e.getMessage()));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+            .body(new ApiExceptionDTO(HttpStatus.NO_CONTENT, e.getMessage()));
     }
 }
