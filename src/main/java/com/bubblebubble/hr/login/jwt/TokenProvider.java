@@ -38,7 +38,7 @@ public class TokenProvider {
     private final Key key;
 
     private final UserDetailsService userDetailsService;
-    public TokenProvider(@Value("${jwt.secret}") String secretKey, @Qualifier("myUserDetailsService") UserDetailsService userDetailsService){
+    public TokenProvider(@Value("${jwt.secret}") String secretKey, UserDetailsService userDetailsService){
 
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
