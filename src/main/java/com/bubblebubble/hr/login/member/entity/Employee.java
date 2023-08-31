@@ -2,6 +2,7 @@ package com.bubblebubble.hr.login.member.entity;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,6 +21,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@DynamicInsert
 public class Employee {
 
     @Id
@@ -59,7 +61,7 @@ public class Employee {
     @Column(name = "PAYROLL_ACCOUNT")
     private String payrollAccount;
 
-    @Column(name = "IS_EMPLOYED", columnDefinition = "Y")
+    @Column(name = "IS_EMPLOYED")
     private Character isEmployed;
 
     @Column(name = "STATUS")

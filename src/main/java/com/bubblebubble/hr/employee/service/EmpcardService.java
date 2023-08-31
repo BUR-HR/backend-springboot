@@ -1,7 +1,9 @@
 package com.bubblebubble.hr.employee.service;
 
 import com.bubblebubble.hr.employee.repository.EmpcardRepository;
+import com.bubblebubble.hr.login.dto.EmployeeDTO;
 import com.bubblebubble.hr.login.member.entity.Employee;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,18 +14,21 @@ public class EmpcardService {
     private final EmpcardRepository empcardRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public EmpcardService(EmpcardRepository empcardRepository, PasswordEncoder passwordEncoder) {
+    private final ModelMapper modelMapper;
+
+    public EmpcardService(EmpcardRepository empcardRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.empcardRepository = empcardRepository;
         this.passwordEncoder = passwordEncoder;
+        this.modelMapper = modelMapper;
     }
 
-    public Employee registerEmployee(Employee employee, String temporaryPassword) {
+    public Employee registerEmployee(EmployeeDTO employee, String temporaryPassword) {
 
         String savedPassword = passwordEncoder.encode(temporaryPassword);
-        employee.setPassword(savedPassword); // 임시 비밀번호 설정
-        employee.setIsEmployed('Y');
+        employee.setEmployeePassword(savedPassword);// 임시 비밀번호 설정
         System.out.println("[registerEmployee] employee = " + employee);
-        return empcardRepository.save(employee);
+        Employee emp = modelMapper.map(employee, Employee.class);
+        return empcardRepository.save(emp);
     }
 
     public static String generateTemporaryPassword() {
