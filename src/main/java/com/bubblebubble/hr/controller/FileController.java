@@ -43,6 +43,8 @@ public class  FileController {
 
             return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원가입 성공", temporaryPassword));
         } catch (Exception e) {
+            System.out.println("An error occurred during employee registration: " + e.getMessage());
+            e.printStackTrace(); // Print the full stack trace for detailed information
             return ResponseEntity.status(500).body("직원 등록에 실패하였습니다.");
         }
     }
