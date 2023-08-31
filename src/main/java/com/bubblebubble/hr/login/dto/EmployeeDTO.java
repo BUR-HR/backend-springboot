@@ -49,6 +49,8 @@
 
         private String renameFile;
 
+        private String bank;
+
         @Override
         public String getUsername() {
             return this.employeeEmail;

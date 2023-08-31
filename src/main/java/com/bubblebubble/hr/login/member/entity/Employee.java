@@ -78,6 +78,9 @@ public class Employee {
     @JoinColumn(name = "EMP_NO")
     private List<EmployeeRole> employeeRole;
 
+    @Column(name = "BANK")
+    private String bank;
+
     public Employee( String employeePassword) {
         this.employeePassword = employeePassword;
     }
