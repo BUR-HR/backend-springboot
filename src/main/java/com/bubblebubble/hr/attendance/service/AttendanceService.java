@@ -94,6 +94,7 @@ public class AttendanceService {
         .findTopByEmpNoAndStartDateTimeBetween(empNo, startDateTime, endDateTime)
         .orElseThrow(() -> new AttendanceInfoNotFoundException("출근 정보가 존재하지 않습니다."));
         
+        log.info("[AttendanceService] attendance {}", attendance);
         log.info("[AttendanceService] getPrivateAttendanceStatus end =========================");
         return modelMapper.map(attendance, AttendanceDTO.class);
     }

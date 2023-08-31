@@ -39,7 +39,6 @@ public class AttendanceController {
 
         List<AttendanceDTO> attendanceList = attendanceService.getPrivateAttendanceList(employee.getEmpNo());
 
-        log.info("[AttendanceController] {}", attendanceList);
         log.info("[AttendanceController] getPrivateAttendanceList end =========================");
 
         return ResponseEntity.ok().body(attendanceList);
