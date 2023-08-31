@@ -65,7 +65,6 @@ public class Employee {
     private Character isEmployed;
 
     @Column(name = "STATUS")
-    @ColumnDefault("'재직'")
     private String employeeStatus;
 
 
