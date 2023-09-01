@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/file")
 @Slf4j
@@ -40,8 +43,10 @@ public class  FileController {
             String temporaryPassword = EmpcardService.generateTemporaryPassword();
             System.out.println("temporaryPassword = " + temporaryPassword);
             Employee registeredEmployee = empcardService.registerEmployee(employee, temporaryPassword);
-
-            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원가입 성공", temporaryPassword));
+            Map<String, Object> responseMap = new HashMap<>();
+            responseMap.put("empNo", registeredEmployee.getEmpNo());
+            responseMap.put("tempPass", temporaryPassword);
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원가입 성공", responseMap));
         } catch (Exception e) {
             System.out.println("An error occurred during employee registration: " + e.getMessage());
             e.printStackTrace(); // Print the full stack trace for detailed information
