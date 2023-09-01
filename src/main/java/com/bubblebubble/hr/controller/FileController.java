@@ -57,7 +57,9 @@ public class  FileController {
 
 
             // 이메일 보내기
-            mailService.sendEmail(email);
+            mailService.sendEmail(email, String.valueOf(registeredEmployee.getEmpNo()), temporaryPassword);
+
+
 
 
             return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원가입 성공", responseMap));
