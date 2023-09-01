@@ -25,7 +25,10 @@ spring:
     database: oracle
     properties:
       hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
         '[format_sql]': true
+      
 
 jwt:
   secret: YcDq0URXmDIeeKjYz1afWM8ReWaHzDCc5d7ccEQCXYqUlLQKSq77px/n2znavLLNNu3P+GbPzpnKMqOC/I38jQ==
