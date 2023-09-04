@@ -25,4 +25,8 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
     @Override
     @Query("select m from Attendance m join fetch m.employee order by m.no desc")
     List<Attendance> findAll();
+
+
+    List<Attendance> findByEmpNoAndStartDateTimeBetweenOrderByNoDesc(int empNo, LocalDateTime startOfWeek,
+            LocalDateTime endOfWeek);
 }
