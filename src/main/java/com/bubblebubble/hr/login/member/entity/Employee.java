@@ -67,6 +67,7 @@ public class Employee {
     @Column(name = "STATUS")
     private String employeeStatus;
 
+
     @Column(name = "GENDER")
     private String employeeGender;
 
@@ -76,6 +77,9 @@ public class Employee {
     @OneToMany
     @JoinColumn(name = "EMP_NO")
     private List<EmployeeRole> employeeRole;
+
+    @Column(name = "BANK")
+    private String bank;
 
     public Employee( String employeePassword) {
         this.employeePassword = employeePassword;
