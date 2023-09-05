@@ -74,6 +74,12 @@ public class Employee {
     @Column(name = "LEAVE_DATE")
     private Date leaveDate;
 
+    @Column(name = "ORIGINFILE")
+    private String originFile;
+
+    @Column(name = "RENAMEFILE")
+    private String renameFile;
+
     @OneToMany
     @JoinColumn(name = "EMP_NO")
     private List<EmployeeRole> employeeRole;
