@@ -37,7 +37,7 @@ public class FileService {
         log.info("[FileService] employeeDTO : " + employeeDTO);
 
         String replaceFileName = null;
-        int result = 0; // 결과에 따른 값을 구분하기 위한 용도의 변수
+        int result = -1; // 결과에 따른 값을 구분하기 위한 용도의 변수
 
         try {
             replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, UUID.randomUUID().toString().replace("-", ""), fileImgs);
@@ -53,6 +53,7 @@ public class FileService {
 
                 empcardRepository.save(insertFile);
 
+                log.info("update check");
                 result = 1;
             }
 
@@ -65,6 +66,6 @@ public class FileService {
         }
 
         log.info("[FileService] insertFile End ================ ");
-        return (result > 0) ? "파일 업로드 성공" : "파일 업로드 실패";
+        return (result > 0) ? "File uploaded successfully" : "File uploaded fail";
     }
 }
