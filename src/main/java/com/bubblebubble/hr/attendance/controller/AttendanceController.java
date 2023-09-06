@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bubblebubble.hr.attendance.AttendanceType;
 import com.bubblebubble.hr.attendance.dto.AttendanceDTO;
+import com.bubblebubble.hr.attendance.dto.AttendanceStatusDTO;
 import com.bubblebubble.hr.attendance.service.AttendanceService;
 import com.bubblebubble.hr.login.dto.EmployeeDTO;
 
@@ -48,8 +49,7 @@ public class AttendanceController {
     public ResponseEntity<?> getPrivateAttendanceStatus(@AuthenticationPrincipal EmployeeDTO employee) throws AttendanceInfoNotFoundException {
         log.info("[AttendanceController] getPrivateAttendanceStatus start =========================");
 
-        AttendanceDTO attendance = attendanceService.getPrivateAttendanceStatus(employee.getEmpNo());
-        attendance.setEmployee(null);
+        AttendanceStatusDTO attendance = attendanceService.getPrivateAttendanceStatus(employee.getEmpNo());
         log.info("[AttendanceController] getPrivateAttendanceStatus end =========================");
 
         return ResponseEntity.ok(attendance);
