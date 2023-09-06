@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Severance {
     @EmbeddedId
-    SeveracePK id;
+    private SeverancePK id;
 }

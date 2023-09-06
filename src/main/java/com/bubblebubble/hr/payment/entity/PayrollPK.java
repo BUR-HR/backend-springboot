@@ -16,8 +16,6 @@ public class PayrollPK implements Serializable {
     private int empNo;
     @Column(name = "PAYROLL_NO")
     private int severanceNo;
-    @Column(name = "PAYMENT_NO")
-    private int paymentNo;
 
     @Override
     public int hashCode() {
@@ -25,7 +23,6 @@ public class PayrollPK implements Serializable {
         int result = 1;
         result = prime * result + empNo;
         result = prime * result + severanceNo;
-        result = prime * result + paymentNo;
         return result;
     }
 
@@ -41,8 +38,6 @@ public class PayrollPK implements Serializable {
         if (empNo != other.empNo)
             return false;
         if (severanceNo != other.severanceNo)
-            return false;
-        if (paymentNo != other.paymentNo)
             return false;
         return true;
     }

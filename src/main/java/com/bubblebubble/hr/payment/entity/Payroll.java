@@ -1,5 +1,6 @@
 package com.bubblebubble.hr.payment.entity;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -14,6 +15,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class Payroll {
-    @Id
-    long paymentNo;
+    @EmbeddedId
+    private PayrollPK paymentNo;
 }

@@ -49,6 +49,7 @@ public class AttendanceController {
         log.info("[AttendanceController] getPrivateAttendanceStatus start =========================");
 
         AttendanceDTO attendance = attendanceService.getPrivateAttendanceStatus(employee.getEmpNo());
+        attendance.setEmployee(null);
         log.info("[AttendanceController] getPrivateAttendanceStatus end =========================");
 
         return ResponseEntity.ok(attendance);
