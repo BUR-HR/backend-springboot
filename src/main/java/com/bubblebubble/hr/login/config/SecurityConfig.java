@@ -1,9 +1,7 @@
 package com.bubblebubble.hr.login.config;
 
+import java.util.Arrays;
 
-import com.bubblebubble.hr.login.jwt.JwtAccessDeniedHandler;
-import com.bubblebubble.hr.login.jwt.JwtAuthenticationEntryPoint;
-import com.bubblebubble.hr.login.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -17,7 +15,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
+import com.bubblebubble.hr.login.jwt.JwtAccessDeniedHandler;
+import com.bubblebubble.hr.login.jwt.JwtAuthenticationEntryPoint;
+import com.bubblebubble.hr.login.jwt.TokenProvider;
 
 //  Spring Security를 설정하는 SecurityConfig 클래스입니다. 이 클래스에서는 보안과 관련된 다양한 설정을 수행
 @EnableWebSecurity
@@ -30,9 +30,8 @@ public class SecurityConfig {
 
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    public SecurityConfig(TokenProvider tokenProvider
-            , JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint
-            , JwtAccessDeniedHandler jwtAccessDeniedHandler) {
+    public SecurityConfig(TokenProvider tokenProvider, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
+            JwtAccessDeniedHandler jwtAccessDeniedHandler) {
         this.tokenProvider = tokenProvider;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
@@ -48,7 +47,7 @@ public class SecurityConfig {
     /* 2. Security 설정을 무시할 정적 리소스 등록 */
     // 정적 리소스 (CSS, JS, 이미지 등)에 대한 보안 설정을 무시(해당 리소스들은 인증이나 인가가 필요하지 않기 때문)
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
+    public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers("/css/**", "/js/**", "/images/**",
                 "/lib/**", "/productimgs/**");
     }
@@ -62,7 +61,7 @@ public class SecurityConfig {
                 .exceptionHandling()
                 /* 기본 시큐리티 설정에서 JWT 토큰과 관련된 유효성과 권한 체크용 설정*/
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)//  필요한 권한 없이 접근(403)
-                .accessDeniedHandler(jwtAccessDeniedHandler)          // 유효한 자격 증명 없을 시(401)
+                .accessDeniedHandler(jwtAccessDeniedHandler) // 유효한 자격 증명 없을 시(401)
                 .and()
                 // 권한
                 .authorizeRequests()
@@ -78,7 +77,7 @@ public class SecurityConfig {
                 /* 세션 인증 방식을 쓰지 않겠다는 설정 */
                 // JWT 토큰 방식을 사용하므로 세션을 사용하지 않도록 설정
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .cors()
                 .and()
@@ -86,16 +85,16 @@ public class SecurityConfig {
                 .apply(new JwtSecurityConfig(tokenProvider));
         return http.build();
     }
+
     /* 4. CORS(Cross-origin-resource-sharing) 설정용 Bean */
     @Bean
-    CorsConfigurationSource corsConfigurationSource(){
+    CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:3001"));  // 어느 도메인에서 온 요청을 허용할 것인지를 지정
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:3001")); // 어느 도메인에서 온 요청을 허용할 것인지를 지정
         configuration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "DELETE")); // 어떤 HTTP 메서드를 사용한 요청을 허용할 것인지를 지정
         configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Content-type" // 어떤 HTTP 헤더를 사용한 요청을 허용할 것인지를 지정
-                , "Access-Control-Allow-Headers", "Authorization"
-                , "X-Requested-With"));
+                , "Access-Control-Allow-Headers", "Authorization", "X-Requested-With"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 

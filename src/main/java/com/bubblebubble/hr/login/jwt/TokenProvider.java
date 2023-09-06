@@ -1,29 +1,31 @@
 package com.bubblebubble.hr.login.jwt;
 
-//토큰 생성, 토큰 인증(Authentication 객체 반환), 토큰 유효성 검사
+import java.security.Key;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import com.bubblebubble.hr.login.dto.EmployeeDTO;
-import com.bubblebubble.hr.login.dto.TokenDTO;
-import com.bubblebubble.hr.login.exception.TokenException;
-import com.bubblebubble.hr.login.member.entity.Employee;
-import com.bubblebubble.hr.login.member.entity.EmployeeRole;
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import com.bubblebubble.hr.login.dto.TokenDTO;
+import com.bubblebubble.hr.login.exception.TokenException;
+import com.bubblebubble.hr.login.member.entity.Employee;
+import com.bubblebubble.hr.login.member.entity.EmployeeRole;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Slf4j

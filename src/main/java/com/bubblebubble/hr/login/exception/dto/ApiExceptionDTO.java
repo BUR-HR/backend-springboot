@@ -11,13 +11,13 @@ import org.springframework.http.HttpStatus;
 @ToString
 public class ApiExceptionDTO {
 
-    private int status;         //코드
-    private String message;     //에러메세지
+    private int status; //코드
+    private String message; //에러메세지
 
-    public ApiExceptionDTO(){
+    public ApiExceptionDTO() {
     }
 
-    public ApiExceptionDTO(HttpStatus status, String message){
+    public ApiExceptionDTO(HttpStatus status, String message) {
         this.status = status.value();
         this.message = message;
     }

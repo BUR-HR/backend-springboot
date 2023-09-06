@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.bubblebubble.hr.attendance.entity.Attendance;
 
@@ -20,4 +21,12 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
             LocalDateTime endDateTime);
 
     Optional<Attendance> findTopByEmpNoAndEndDateTimeIsNull(int empNo);
+
+    @Override
+    @Query("select m from Attendance m join fetch m.employee order by m.no desc")
+    List<Attendance> findAll();
+
+
+    List<Attendance> findByEmpNoAndStartDateTimeBetweenOrderByNoDesc(int empNo, LocalDateTime startOfWeek,
+            LocalDateTime endOfWeek);
 }
