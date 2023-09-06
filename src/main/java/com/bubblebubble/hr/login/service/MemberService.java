@@ -24,6 +24,7 @@ public class MemberService {
         this.modelMapper = modelMapper;
     }
 
+    // empNo를 받아서 직원 조회
     public EmployeeDTO selectMyInfo(String empNo) {
         log.info("[MemberService] selectMyInfo Start ================= ");
 

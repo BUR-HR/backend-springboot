@@ -25,6 +25,7 @@ public class MemberController {
 
     }
 
+    // 직원조회
     @Operation(summary = "직원 조회 요청", description = "직원 한명이 조회됩니다.", tags = {"MemberController"})
     @GetMapping("/employee/{empNo}")
     public ResponseEntity<ResponseDTO> selectMyMemberInfo(@PathVariable String empNo) {

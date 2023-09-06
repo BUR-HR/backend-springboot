@@ -47,8 +47,6 @@ public class  FileController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
-    // 1파일 앤드포인트 직원등록 앤드포인트로 합치니까 파일 들어오는데 비밀번호에 널값 들어감
-    // 2지금같이 따로 빼면 파일은 안들어가는데 직원등록은 됨 ; 코드 비교해보고 확인해보기 (노션에있는 코드는 1번)
     @PostMapping("/register")
     public ResponseEntity<?> registerEmployee(@ModelAttribute EmployeeDTO employeeDTO, @RequestParam("fileImgs") MultipartFile fileImgs) {
         try {
@@ -66,6 +64,7 @@ public class  FileController {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("파일 업로드에 실패하였습니다.");
             }
 
+            // 이메일
             Employee registeredEmployee = empcardService.registerEmployee(employeeDTO, temporaryPassword);
             Map<String, Object> responseMap = new HashMap<>();
             responseMap.put("empNo", registeredEmployee.getEmpNo());
@@ -73,7 +72,6 @@ public class  FileController {
 
             String email = employeeDTO.getEmployeeEmail();
 
-            // 이메일 보내기
             mailService.sendEmail(email, String.valueOf(registeredEmployee.getEmpNo()), temporaryPassword);
 
             return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원가입 성공", responseMap));
