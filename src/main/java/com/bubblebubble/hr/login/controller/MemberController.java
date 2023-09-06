@@ -63,6 +63,27 @@ public class MemberController {
     }
 
 
+    @GetMapping("/employee/empName")
+    public ResponseEntity<ResponseDTO> selectEmployeeByName(@RequestParam String empName) {
+        log.info("[MemberController] selectEmployeeByName start ================= ");
+        log.info("[MemberController] selectEmployeeByName {} ========= ", empName);
+
+        try {
+            EmployeeDTO employee = memberService.selectEmployeeByName(empName);
+            if (employee != null) {
+                return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", employee));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new ResponseDTO(HttpStatus.NOT_FOUND, "직원을 찾을 수 없습니다.", null));
+            }
+        } catch (Exception e) {
+            log.error("An error occurred during employee lookup by name: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "조회 중 에러가 발생했습니다.", null));
+        }
+    }
+
+
 
 
 }

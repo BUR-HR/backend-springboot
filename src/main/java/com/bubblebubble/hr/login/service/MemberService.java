@@ -35,6 +35,16 @@ public class MemberService {
         return modelMapper.map(employee, EmployeeDTO.class);
     }
 
+    // empName를 받아서 직원 조회
+    public EmployeeDTO selectEmployeeByName(String empName) {
+        log.info("[MemberService] selectMyInfo Start ================= ");
+
+        Employee employee = memberRepository.findByEmpName(empName);
+        log.info("[MemberService] {} ============ ", employee);
+        log.info("[MemberService] selectMyInfo End ============ ");
+        return modelMapper.map(employee, EmployeeDTO.class);
+    }
+
     @Transactional
     public EmployeeDTO registerEmployee(EmployeeDTO employeeDTO) {
         // EmployeeDTO를 Employee 엔티티로 변환
