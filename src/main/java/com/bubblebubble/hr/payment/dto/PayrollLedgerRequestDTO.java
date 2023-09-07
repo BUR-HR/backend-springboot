@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class PayrollLedgerRequestDTO {
     Long paymentNo;
-    List<Long> empNo;
+    List<Integer> empNo;
     Long payrollNo;
     String name;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

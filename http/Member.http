@@ -13,8 +13,9 @@ Access-Control-Allow-Origin: *
 POST  http://localhost:8080/api/file/register
 Accept: */*
 Access-Control-Allow-Origin: *
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6WyJST0xFX0FETUlOIiwiUk9MRV9FTVBMT1lFRSIsIlJPTEVfSFJfRU1QTE9ZRUUiLCJST0xFX1BBWVJPTEwiXSwiZXhwIjoxNjkzMzkyMDM5fQ.26mDYnuO7P_yAVxR-HkzuDBPlOqBfFwMjmC5JEdSFBCnMwvL6t805xldkWcCFZW0HhKRhfwPtt1UAl3vQsgWuA
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI3IiwiYXV0aCI6WyJST0xFX0FETUlOIiwiUk9MRV9FTVBMT1lFRSIsIlJPTEVfSFJfRU1QTE9ZRUUiLCJST0xFX1BBWVJPTEwiXSwiZXhwIjoxNjk0MDczMTczfQ.JepZ4S3u382TEeo_JlCCeh2v4iTvGwzyrTe7cWU1XL0BcAt2YUuBDPsdcOzOxwNOuONxdzXXn1ZUKAijxlUbZg
 
 {
-"empName":"홍길동"
+"empName":"홍길동",
+
 }
