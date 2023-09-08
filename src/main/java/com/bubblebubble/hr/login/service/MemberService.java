@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Service
@@ -33,6 +35,19 @@ public class MemberService {
         log.info("[MemberService] {} ============ ", employee);
         log.info("[MemberService] selectMyInfo End ============ ");
         return modelMapper.map(employee, EmployeeDTO.class);
+    }
+
+    // 전체 직원 목록 조회
+    public List<EmployeeDTO> getAllEmployees() {
+        List<Employee> employees = memberRepository.findAll(); // 전체 직원 조회
+        List<EmployeeDTO> employeeDTOs = new ArrayList<>();
+
+        for (Employee employee : employees) {
+            EmployeeDTO employeeDTO = modelMapper.map(employee, EmployeeDTO.class);
+            employeeDTOs.add(employeeDTO);
+        }
+
+        return employeeDTOs;
     }
 
     // empName를 받아서 직원 조회

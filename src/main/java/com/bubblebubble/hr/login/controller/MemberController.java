@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1")
 @Slf4j
@@ -50,6 +52,7 @@ public class MemberController {
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO> registerEmployee(@RequestBody EmployeeDTO employeeDTO) {
+        log.info("[RegisterController] registerEmployee start ================= ");
         try {
             EmployeeDTO registeredEmployeeDTO = memberService.registerEmployee(employeeDTO);
 
@@ -62,6 +65,21 @@ public class MemberController {
         }
     }
 
+    //직원전체조회
+    @GetMapping("/employee/all")
+    public ResponseEntity<ResponseDTO> getAllEmployees(@RequestParam(required = false) EmployeeDTO employeeDTO) {
+        log.info("[MemberController] getAllEmployees start ================= ");
+
+        try {
+            List<EmployeeDTO> employees = memberService.getAllEmployees();
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "전체 직원 목록 조회 성공", employees));
+        } catch (Exception e) {
+            log.error("An error occurred during employee lookup: {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "전체 직원 목록 조회 중 에러가 발생했습니다.", null));
+        }
+    }
+
 
     @GetMapping("/employee/empName")
     public ResponseEntity<ResponseDTO> selectEmployeeByName(@RequestParam String empName) {
@@ -71,6 +89,7 @@ public class MemberController {
         try {
             EmployeeDTO employee = memberService.selectEmployeeByName(empName);
             if (employee != null) {
+                log.info("[MemberController] selectEmployeeByName 결과: {}", employee.toString());
                 return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", employee));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -82,6 +101,7 @@ public class MemberController {
                     .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "조회 중 에러가 발생했습니다.", null));
         }
     }
+
 
 
 
