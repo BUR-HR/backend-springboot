@@ -1,35 +1,44 @@
 package com.bubblebubble.hr.payment.entity;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import com.bubblebubble.hr.payment.dto.PayrollLedgerInsertRequestDTO;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name = "TBL_PAYROLL_LEDGER")
+@SequenceGenerator(sequenceName = "SEQ_PAYROLL_NO", name = "SEQ_TBL_PAYROLL_NO", allocationSize = 1, initialValue = 1)
 @NoArgsConstructor
 @Getter
 @DynamicInsert
+@ToString
 public class PayrollLedger {
     @Id
     @Column(name = "PAYROLL_NO")
+    @GeneratedValue(generator = "SEQ_TBL_PAYROLL_NO", strategy = GenerationType.SEQUENCE)
     private int no;
     @Column(name = "PAYROLL_NAME")
     private String name;
     @Column(name = "PAYMENT_SCHEDULED_DATE")
-    private LocalDateTime paymentScheduledDate;
+    private LocalDate paymentScheduledDate;
     @Column(name = "SALARY_BASE_START_DATE")
-    private LocalDateTime salaryBaseStartDate;
+    private LocalDate salaryBaseStartDate;
     @Column(name = "SALARY_BASE_END_DATE")
-    private LocalDateTime salaryBaseEndDate;
+    private LocalDate salaryBaseEndDate;
     @Column(name = "TOTAL_SALARY_AMOUNT")
     private int totalSalaryAmount;
     @Column(name = "TOTAL_AMOUNT_TAX")
@@ -37,15 +46,16 @@ public class PayrollLedger {
     @Column(name = "NET_INCOME")
     private int netIncome;
     @Column(name = "CREATE_DATE")
-    private LocalDateTime createDate;
+    private LocalDate createDate;
     @Column(name = "IS_CLOSED")
     private String isClosed;
-
+    @Column(name = "PAYMENT_TYPE")
+    private String paymentType;
 
     @Builder
-    public PayrollLedger(int no, String name, LocalDateTime paymentScheduledDate, LocalDateTime salaryBaseStartDate,
-            LocalDateTime salaryBaseEndDate, int totalSalaryAmount, int totalAmountTax, int netIncome,
-            LocalDateTime createDate, String isClosed) {
+    public PayrollLedger(int no, String name, LocalDate paymentScheduledDate, LocalDate salaryBaseStartDate,
+            LocalDate salaryBaseEndDate, int totalSalaryAmount, int totalAmountTax, int netIncome,
+            LocalDate createDate, String isClosed) {
         this.no = no;
         this.name = name;
         this.paymentScheduledDate = paymentScheduledDate;
@@ -58,5 +68,12 @@ public class PayrollLedger {
         this.isClosed = isClosed;
     }
 
-    
+    public PayrollLedger(PayrollLedgerInsertRequestDTO request) {
+        this.name = request.getName();
+        this.salaryBaseStartDate = request.getSalaryBaseStartDate();
+        this.salaryBaseEndDate = request.getSalaryBaseEndDate();
+        this.paymentScheduledDate = request.getPaymentScheduledDate();
+        this.paymentType = request.getPaymentType();
+        this.createDate = LocalDate.now();
+    }
 }

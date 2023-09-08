@@ -1,6 +1,6 @@
 package com.bubblebubble.hr.payment.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,12 +13,12 @@ public class PayrollLedgerResponseDTO {
 
     private int no;
     private String name;
-    private LocalDateTime paymentScheduledDate;
-    private LocalDateTime salaryBaseStartDate;
-    private LocalDateTime salaryBaseEndDate;
+    private LocalDate paymentScheduledDate;
+    private LocalDate salaryBaseStartDate;
+    private LocalDate salaryBaseEndDate;
     private int totalSalaryAmount;
     private int totalAmountTax;
     private int netIncome;
-    private LocalDateTime createDate;
+    private LocalDate createDate;
     private String isClosed;
 }
