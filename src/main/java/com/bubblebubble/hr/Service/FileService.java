@@ -1,18 +1,19 @@
 package com.bubblebubble.hr.Service;
 
-import com.bubblebubble.hr.employee.repository.EmpcardRepository;
-import com.bubblebubble.hr.login.dto.EmployeeDTO;
-import com.bubblebubble.hr.login.member.entity.Employee;
-import com.bubblebubble.hr.util.FileUploadUtils;
+import java.util.UUID;
 
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.UUID;
+import com.bubblebubble.hr.employee.repository.EmpcardRepository;
+import com.bubblebubble.hr.login.dto.EmployeeDTO;
+import com.bubblebubble.hr.login.member.entity.Employee;
+import com.bubblebubble.hr.util.FileUploadUtils;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -26,9 +27,9 @@ public class FileService {
     @Value("${image.image-url}")
     private String IMAGE_URL;
 
-    public FileService(EmpcardRepository empcardRepository, ModelMapper modelMapper) {
-        this.empcardRepository = empcardRepository;
+    public FileService(ModelMapper modelMapper, EmpcardRepository empcardRepository) {
         this.modelMapper = modelMapper;
+        this.empcardRepository = empcardRepository;
     }
 
     @Transactional
@@ -52,7 +53,7 @@ public class FileService {
                 Employee insertFile = modelMapper.map(employeeDTO, Employee.class);
 
                 empcardRepository.save(insertFile);
-
+                
                 log.info("update check");
                 result = 1;
             }

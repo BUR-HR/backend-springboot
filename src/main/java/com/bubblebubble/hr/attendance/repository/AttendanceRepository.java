@@ -11,22 +11,17 @@ import com.bubblebubble.hr.attendance.entity.Attendance;
 
 public interface AttendanceRepository extends JpaRepository<Attendance, Integer> {
 
-    List<Attendance> findByEmpNoOrderByNoDesc(int empNo);
+        List<Attendance> findByEmpNoOrderByNoDesc(int empNo);
 
-    List<Attendance> findByEmpNo(int empNo);
+        List<Attendance> findByEmpNo(int empNo);
 
-    Optional<Attendance> findByEmpNoAndStartDateTime(int empNo, LocalDateTime workDate);
+        Optional<Attendance> findTopByEmpNoAndStartDateTimeBetween(int empNo, LocalDateTime startDateTime,
+                        LocalDateTime endDateTime);
 
-    Optional<Attendance> findTopByEmpNoAndStartDateTimeBetween(int empNo, LocalDateTime startDateTime,
-            LocalDateTime endDateTime);
+        @Override
+        @Query("select m from Attendance m join fetch m.employee order by m.no desc")
+        List<Attendance> findAll();
 
-    Optional<Attendance> findTopByEmpNoAndEndDateTimeIsNull(int empNo);
-
-    @Override
-    @Query("select m from Attendance m join fetch m.employee order by m.no desc")
-    List<Attendance> findAll();
-
-
-    List<Attendance> findByEmpNoAndStartDateTimeBetweenOrderByNoDesc(int empNo, LocalDateTime startOfWeek,
-            LocalDateTime endOfWeek);
+        List<Attendance> findByEmpNoAndStartDateTimeBetweenOrderByNoDesc(int empNo, LocalDateTime startOfWeek,
+                        LocalDateTime endOfWeek);
 }
