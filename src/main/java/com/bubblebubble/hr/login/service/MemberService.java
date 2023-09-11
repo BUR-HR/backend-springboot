@@ -1,7 +1,10 @@
 package com.bubblebubble.hr.login.service;
 
+import com.bubblebubble.hr.login.dto.EmployeeAndJobDTO;
 import com.bubblebubble.hr.login.dto.EmployeeDTO;
 import com.bubblebubble.hr.login.member.entity.Employee;
+import com.bubblebubble.hr.login.member.entity.EmployeeAndJob;
+import com.bubblebubble.hr.login.repository.EmployeeAndJobRepository;
 import com.bubblebubble.hr.login.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -9,9 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -20,10 +22,13 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final ModelMapper modelMapper;
 
+    private final EmployeeAndJobRepository employeeAndJobRepository;
+
     @Autowired
-    public MemberService(MemberRepository memberRepository, ModelMapper modelMapper) {
+    public MemberService(MemberRepository memberRepository, ModelMapper modelMapper,EmployeeAndJobRepository employeeAndJobRepository) {
         this.memberRepository = memberRepository;
         this.modelMapper = modelMapper;
+        this.employeeAndJobRepository = employeeAndJobRepository;
     }
 
     // empNo를 받아서 직원 조회
@@ -75,5 +80,26 @@ public class MemberService {
     }
 
 
+    public Map<String, List<EmployeeAndJobDTO>> getEmpAllList() {
 
+        List<EmployeeAndJob> tempList  = employeeAndJobRepository.findByJobJobCode(2);
+        System.out.println("tempList = " + tempList);
+        List<EmployeeAndJob> dempList =  employeeAndJobRepository.findByJobJobCode(3);
+        System.out.println("dempList = " + dempList);
+        List<EmployeeAndJob> empList = employeeAndJobRepository.findByJobJobCode(4);
+        System.out.println("empList = " + empList);
+
+        List<EmployeeAndJobDTO> tempDTO = tempList.stream().map(temp -> modelMapper.map(temp, EmployeeAndJobDTO.class)).collect(Collectors.toList());
+        List<EmployeeAndJobDTO> dempDTO = dempList.stream().map(dempt -> modelMapper.map(dempt, EmployeeAndJobDTO.class)).collect(Collectors.toList());
+        List<EmployeeAndJobDTO> empDTO = empList.stream().map(emp-> modelMapper.map(emp, EmployeeAndJobDTO.class)).collect(Collectors.toList());
+
+        Map<String, List<EmployeeAndJobDTO>> map = new HashMap<>();
+        map.put("temp", tempDTO);
+        map.put("demp", dempDTO);
+        map.put("emp", empDTO);
+
+        return map;
+
+
+    }
 }

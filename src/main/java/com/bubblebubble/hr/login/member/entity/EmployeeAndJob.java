@@ -1,7 +1,6 @@
 package com.bubblebubble.hr.login.member.entity;
 
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -24,7 +23,7 @@ import java.util.List;
 @ToString
 @DynamicInsert
 @DynamicUpdate
-public class Employee {
+public class EmployeeAndJob {
 
     @Id
     @Column(name = "EMP_NO")
@@ -36,11 +35,14 @@ public class Employee {
 
     @Column(name = "EMP_NAME")
     private String empName;
-    @Column(name = "DEPT_CODE")
-    private String deptCode;
 
-    @Column(name = "JOB_CODE")
-    private String jobCode;
+    @ManyToOne
+    @JoinColumn(name = "DEPT_CODE")
+    private Department dept;
+
+    @ManyToOne
+    @JoinColumn(name = "JOB_CODE")
+    private Job job;
 
     @Column(name = "RSDN")
     private String employeeRsdn;
@@ -82,18 +84,7 @@ public class Employee {
     @Column(name = "RENAMEFILE")
     private String renameFile;
 
-    @OneToMany
-    @JoinColumn(name = "EMP_NO")
-    private List<EmployeeRole> employeeRole;
-
     @Column(name = "BANK")
     private String bank;
 
-    public Employee( String employeePassword) {
-        this.employeePassword = employeePassword;
-    }
-
-    public void setPassword(String password) {
-        this.employeePassword = password;
-    }
 }

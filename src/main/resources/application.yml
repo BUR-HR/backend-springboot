@@ -48,3 +48,4 @@ image:
 
   image-dir: src/main/resources/static/fileimgs
   image-url: http://localhost:8080/fileimgs
+

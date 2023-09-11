@@ -51,9 +51,8 @@ public class FileService {
                 log.info("[FileService] insert Image Name : " + replaceFileName);
 
                 Employee insertFile = modelMapper.map(employeeDTO, Employee.class);
-
-                empcardRepository.save(insertFile);
-                
+                Employee employee =empcardRepository.save(insertFile);
+                employeeDTO.setEmpNo(employee.getEmpNo());
                 log.info("update check");
                 result = 1;
             }

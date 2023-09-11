@@ -2,6 +2,7 @@ package com.bubblebubble.hr.login.controller;
 
 import com.bubblebubble.hr.employee.service.EmpcardService;
 import com.bubblebubble.hr.login.common.ResponseDTO;
+import com.bubblebubble.hr.login.dto.EmployeeAndJobDTO;
 import com.bubblebubble.hr.login.dto.EmployeeDTO;
 import com.bubblebubble.hr.login.member.entity.Employee;
 import com.bubblebubble.hr.login.repository.MemberRepository;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -78,7 +80,16 @@ public class MemberController {
         }
     }
 
+    @GetMapping("employee/empAll")
+    public ResponseEntity<ResponseDTO> getEmpAllList(){
 
+        log.info("[MemberController] getEmpAllList start ========");
+
+        Map<String, List<EmployeeAndJobDTO>> map = memberService.getEmpAllList();
+        System.out.println("map = " + map);
+
+        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"전체 사원 조회",map));
+    }
 //    @GetMapping("/employee/empName")
 //    public ResponseEntity<ResponseDTO> selectEmployeeByName(@RequestParam String empName) {
 //        log.info("[MemberController] selectEmployeeByName start ================= ");
