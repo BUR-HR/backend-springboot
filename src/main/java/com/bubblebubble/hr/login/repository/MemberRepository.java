@@ -17,5 +17,6 @@ public interface MemberRepository extends JpaRepository<Employee, Integer> {
 
     List<Employee> findAll();
 
+
 }
 

@@ -28,27 +28,27 @@ public class MemberController {
     }
 
     // 직원조회
-    @Operation(summary = "직원 조회 요청", description = "직원 한명이 조회됩니다.", tags = {"MemberController"})
-    @GetMapping("/employee/{empNo}")
-    public ResponseEntity<ResponseDTO> selectMyMemberInfo(@PathVariable String empNo) {
-
-        log.info("[MemberController] selectMyMemberInfo start ================= ");
-        log.info("[MemberController] selectMyMemberInfo {} ========= ", empNo);
-
-        try {
-            EmployeeDTO employee = memberService.selectMyInfo(empNo);
-            if (employee != null) {
-                return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", employee));
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ResponseDTO(HttpStatus.NOT_FOUND, "직원을 찾을 수 없습니다.", null));
-            }
-        } catch (Exception e) {
-            log.error("An error occurred during employee lookup: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "조회 중 에러가 발생했습니다.", null));
-        }
-    }
+//    @Operation(summary = "직원 조회 요청", description = "직원 한명이 조회됩니다.", tags = {"MemberController"})
+//    @GetMapping("/employee/{empNo}")
+//    public ResponseEntity<ResponseDTO> selectMyMemberInfo(@PathVariable String empNo) {
+//
+//        log.info("[MemberController] selectMyMemberInfo start ================= ");
+//        log.info("[MemberController] selectMyMemberInfo {} ========= ", empNo);
+//
+//        try {
+//            EmployeeDTO employee = memberService.selectMyInfo(empNo);
+//            if (employee != null) {
+//                return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", employee));
+//            } else {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                        .body(new ResponseDTO(HttpStatus.NOT_FOUND, "직원을 찾을 수 없습니다.", null));
+//            }
+//        } catch (Exception e) {
+//            log.error("An error occurred during employee lookup: {}", e.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "조회 중 에러가 발생했습니다.", null));
+//        }
+//    }
 
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO> registerEmployee(@RequestBody EmployeeDTO employeeDTO) {
@@ -56,8 +56,6 @@ public class MemberController {
         try {
             EmployeeDTO registeredEmployeeDTO = memberService.registerEmployee(employeeDTO);
 
-            // 등록된 직원의 사원번호를 응답에 포함시킬 수도 있음
-//            EmployeeDTO registeredEmployeeDTO = memberService.selectMyInfo(String.valueOf(registeredEmployee.getEmpNo()));
             return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원가입 성공", registeredEmployeeDTO));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -81,29 +79,30 @@ public class MemberController {
     }
 
 
-    @GetMapping("/employee/empName")
-    public ResponseEntity<ResponseDTO> selectEmployeeByName(@RequestParam String empName) {
-        log.info("[MemberController] selectEmployeeByName start ================= ");
-        log.info("[MemberController] selectEmployeeByName {} ========= ", empName);
+//    @GetMapping("/employee/empName")
+//    public ResponseEntity<ResponseDTO> selectEmployeeByName(@RequestParam String empName) {
+//        log.info("[MemberController] selectEmployeeByName start ================= ");
+//        log.info("[MemberController] selectEmployeeByName {} ========= ", empName);
+//
+//        try {
+//            EmployeeDTO employee = memberService.selectEmployeeByName(empName);
+//            if (employee != null) {
+//                log.info("[MemberController] selectEmployeeByName 결과: {}", employee.toString());
+//                return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", employee));
+//            } else {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                        .body(new ResponseDTO(HttpStatus.NOT_FOUND, "직원을 찾을 수 없습니다.", null));
+//            }
+//        } catch (Exception e) {
+//            log.error("An error occurred during employee lookup by name: {}", e.getMessage());
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "조회 중 에러가 발생했습니다.", null));
+//        }
 
-        try {
-            EmployeeDTO employee = memberService.selectEmployeeByName(empName);
-            if (employee != null) {
-                log.info("[MemberController] selectEmployeeByName 결과: {}", employee.toString());
-                return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", employee));
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ResponseDTO(HttpStatus.NOT_FOUND, "직원을 찾을 수 없습니다.", null));
-            }
-        } catch (Exception e) {
-            log.error("An error occurred during employee lookup by name: {}", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "조회 중 에러가 발생했습니다.", null));
-        }
-    }
-
-
-
-
+//    }
 
 }
+
+
+
+

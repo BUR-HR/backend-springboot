@@ -34,4 +34,5 @@ public class ApiExceptionAdvice {
         System.out.println("ApiExceptionAdvice.exceptionHandler(AttendanceInfoNotFoundException)");
         return ResponseEntity.noContent().build();
     }
+
 }

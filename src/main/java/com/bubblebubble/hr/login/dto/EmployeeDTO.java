@@ -27,6 +27,10 @@
 
         private String employeePassword;
 
+        private String currentPassword;
+
+        private String newPassword;
+
         private Date hireDate;
 
         private String employeePhone;
