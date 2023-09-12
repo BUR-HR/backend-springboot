@@ -1,12 +1,16 @@
 package com.bubblebubble.hr.payment.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -51,6 +55,11 @@ public class SeveranceLedger {
     private String isClosed;
     @Column(name = "PAYMENT_TYPE")
     private String paymentType;
+    @Column(name = "COUNT")
+    private int count;
+    
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "severanceLedger")
+    private List<Severance> severances = new ArrayList<>();
 
     @Builder
     public SeveranceLedger(int no, String name, LocalDate paymentScheduledDate, LocalDate salaryBaseStartDate,
@@ -75,5 +84,29 @@ public class SeveranceLedger {
         this.paymentScheduledDate = request.getPaymentScheduledDate();
         this.paymentType = request.getPaymentType();
         this.createDate = LocalDate.now();
+    }
+
+    public void addSeverance(Severance severance) {
+        severances.add(severance);
+    }
+
+    public void setTotalSalaryAmount(int totalSalaryAmount) {
+        this.totalSalaryAmount = totalSalaryAmount;
+    }
+
+    public void setTotalAmountTax(int totalAmountTax) {
+        this.totalAmountTax = totalAmountTax;
+    }
+
+    public void setNetIncome(int netIncome) {
+        this.netIncome = netIncome;
+    }
+
+    public void setIsClosed(String isClosed) {
+        this.isClosed = isClosed;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

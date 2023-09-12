@@ -21,4 +21,5 @@ public class PayrollLedgerResponseDTO {
     private int netIncome;
     private LocalDate createDate;
     private String isClosed;
+    private int count;
 }

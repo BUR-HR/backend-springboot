@@ -7,12 +7,19 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.bubblebubble.hr.login.exception.NotFoundEmployeeSalaryException;
 import com.bubblebubble.hr.payment.dto.PayrollLedgerInsertRequestDTO;
 import com.bubblebubble.hr.payment.dto.PayrollLedgerResponseDTO;
 import com.bubblebubble.hr.payment.dto.SeveranceLedgerInsertRequestDTO;
 import com.bubblebubble.hr.payment.dto.SeveranceLedgerResponseDTO;
+import com.bubblebubble.hr.payment.entity.EmployeeSalary;
+import com.bubblebubble.hr.payment.entity.Payroll;
 import com.bubblebubble.hr.payment.entity.PayrollLedger;
+import com.bubblebubble.hr.payment.entity.PayrollPK;
+import com.bubblebubble.hr.payment.entity.Severance;
 import com.bubblebubble.hr.payment.entity.SeveranceLedger;
+import com.bubblebubble.hr.payment.entity.SeverancePK;
+import com.bubblebubble.hr.payment.repository.EmployeeSalaryRepository;
 import com.bubblebubble.hr.payment.repository.PayrollLedgerRepository;
 import com.bubblebubble.hr.payment.repository.PayrollRepository;
 import com.bubblebubble.hr.payment.repository.SeveranceLedgerRepository;
@@ -29,49 +36,78 @@ public class PaymentService {
     private final SeveranceRepository severanceRepository;
     private final PayrollLedgerRepository payrollLedgerRepository;
     private final SeveranceLedgerRepository severanceLedgerRepository;
+    private final EmployeeSalaryRepository employeeSalaryRepository;
 
     public PaymentService(ModelMapper modelMapper, PayrollRepository payrollRepository,
             SeveranceRepository severanceRepository, PayrollLedgerRepository payrollLedgerRepository,
-            SeveranceLedgerRepository severanceLedgerRepository) {
+            SeveranceLedgerRepository severanceLedgerRepository, EmployeeSalaryRepository employeeSalaryRepository) {
         this.modelMapper = modelMapper;
         this.payrollRepository = payrollRepository;
         this.severanceRepository = severanceRepository;
         this.payrollLedgerRepository = payrollLedgerRepository;
         this.severanceLedgerRepository = severanceLedgerRepository;
+        this.employeeSalaryRepository = employeeSalaryRepository;
     }
 
     public List<PayrollLedgerResponseDTO> getPayrollList(String name) {
         List<PayrollLedger> payrollLedger = null;
         if (name.isEmpty())
-            payrollLedger = payrollLedgerRepository.findAll();
+            payrollLedger = payrollLedgerRepository.findByOrderByNoDesc();
         else
-            payrollLedger = payrollLedgerRepository.findByName(name);
+            payrollLedger = payrollLedgerRepository.findByNameOrderByNoDesc(name);
 
         return payrollLedger.stream().map(item -> modelMapper.map(item, PayrollLedgerResponseDTO.class))
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public PayrollLedgerResponseDTO insertPayroll(PayrollLedgerInsertRequestDTO payrollRequest) {
+    public List<PayrollLedgerResponseDTO> insertPayroll(PayrollLedgerInsertRequestDTO payrollRequest)
+            throws IllegalArgumentException, NotFoundEmployeeSalaryException {
         PayrollLedger payrollLedger = new PayrollLedger(payrollRequest);
-        log.info("PayrollLedger {}", payrollLedger);
+        List<EmployeeSalary> employeeSalary = employeeSalaryRepository.findAllById(payrollRequest.getEmpNo());
+
+        if (payrollRequest.getEmpNo().size() != employeeSalary.size()) {
+            throw new IllegalArgumentException();
+        }
 
         PayrollLedger result = payrollLedgerRepository.save(payrollLedger);
 
+        employeeSalary.forEach(emp -> {
+            Payroll payroll = new Payroll(new PayrollPK(emp.getEmpNo(), result.getNo()), emp.getSalary());
+            result.addPayroll(payroll);
+        });
+
+        result.setCount(employeeSalary.size());
         log.info("result {}", result);
 
-        return modelMapper.map(result, PayrollLedgerResponseDTO.class);
+        List<PayrollLedger> payrollLedgers = payrollLedgerRepository.findByOrderByNoDesc();
+
+        return payrollLedgers.stream().map(item -> modelMapper.map(item, PayrollLedgerResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
-    public SeveranceLedgerResponseDTO insertSeverance(SeveranceLedgerInsertRequestDTO severanceRequest) {
+    public List<SeveranceLedgerResponseDTO> insertSeverance(SeveranceLedgerInsertRequestDTO severanceRequest) {
         SeveranceLedger severanceLedger = new SeveranceLedger(severanceRequest);
-        log.info("severance {}", severanceLedger);
+        List<EmployeeSalary> employeeSalary = employeeSalaryRepository.findAllById(severanceRequest.getEmpNo());
+
+        if (severanceRequest.getEmpNo().size() != employeeSalary.size()) {
+            throw new IllegalArgumentException();
+        }
 
         SeveranceLedger result = severanceLedgerRepository.save(severanceLedger);
 
+        employeeSalary.forEach(emp -> {
+            Severance severance = new Severance(new SeverancePK(emp.getEmpNo(), result.getNo()));
+            result.addSeverance(severance);
+        });
+
+        result.setCount(employeeSalary.size());
         log.info("result {}", result);
 
-        return modelMapper.map(result, SeveranceLedgerResponseDTO.class);
+        List<SeveranceLedger> SeveranceLedgers = severanceLedgerRepository.findByOrderByNoDesc();
+
+        return SeveranceLedgers.stream().map(item -> modelMapper.map(item, SeveranceLedgerResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
     public List<SeveranceLedgerResponseDTO> getSeveranceList(String name) {
@@ -82,6 +118,69 @@ public class PaymentService {
             severanceLedger = severanceLedgerRepository.findByName(name);
 
         return severanceLedger.stream().map(item -> modelMapper.map(item, SeveranceLedgerResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<PayrollLedgerResponseDTO> deletePayroll(int no)
+            throws NotFoundPayrollLedgerException, IllegalAccessException {
+        log.info("no {}", no);
+        PayrollLedger payrollLedger = payrollLedgerRepository.findById(no)
+                .orElseThrow(() -> new NotFoundPayrollLedgerException("해당하는 급여대장을 찾을 수 없습니다."));
+
+        if (payrollLedger.getIsClosed() != "N") {
+            throw new IllegalAccessException("이미 마감된 급여대장입니다");
+        }
+
+        payrollLedgerRepository.deleteById(no);
+
+        List<PayrollLedger> payrollLedgers = payrollLedgerRepository.findByOrderByNoDesc();
+
+        return payrollLedgers.stream().map(item -> modelMapper.map(item, PayrollLedgerResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<PayrollLedgerResponseDTO> closePayrollLedger(int no) throws NotFoundPayrollLedgerException {
+        PayrollLedger payrollLedger = payrollLedgerRepository.findById(no)
+                .orElseThrow(() -> new NotFoundPayrollLedgerException("해당하는 급여대장을 찾을 수 없습니다."));
+
+        payrollLedger.setIsClosed("Y");
+
+        List<PayrollLedger> payrollLedgers = payrollLedgerRepository.findByOrderByNoDesc();
+        return payrollLedgers.stream().map(item -> modelMapper.map(item, PayrollLedgerResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<SeveranceLedgerResponseDTO> deleteSeverance(int no)
+            throws NotFoundSeveranceLedgerException, IllegalAccessException {
+        log.info("no {}", no);
+        SeveranceLedger severanceLedger = severanceLedgerRepository.findById(no)
+                .orElseThrow(() -> new NotFoundSeveranceLedgerException("해당하는 퇴직금대장을 찾을 수 없습니다."));
+
+        if (severanceLedger.getIsClosed() != "N") {
+            throw new IllegalAccessException("이미 마감된 급여대장입니다");
+        }
+
+        severanceLedgerRepository.deleteById(no);
+
+        List<SeveranceLedger> severanceLedgers = severanceLedgerRepository.findByOrderByNoDesc();
+
+        return severanceLedgers.stream().map(item -> modelMapper.map(item, SeveranceLedgerResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<SeveranceLedgerResponseDTO> closeSeveranceLedger(int no) throws NotFoundSeveranceLedgerException {
+        SeveranceLedger severanceLedger = severanceLedgerRepository.findById(no)
+                .orElseThrow(() -> new NotFoundSeveranceLedgerException("해당하는 급여대장을 찾을 수 없습니다."));
+
+        severanceLedger.setIsClosed("Y");
+
+        List<SeveranceLedger> severanceLedgers = severanceLedgerRepository.findByOrderByNoDesc();
+
+        return severanceLedgers.stream().map(item -> modelMapper.map(item, SeveranceLedgerResponseDTO.class))
                 .collect(Collectors.toList());
     }
 

@@ -8,6 +8,8 @@ import com.bubblebubble.hr.payment.entity.PayrollLedger;
 
 public interface PayrollLedgerRepository extends JpaRepository<PayrollLedger, Integer> {
 
-    List<PayrollLedger> findByName(String name);
+    List<PayrollLedger> findByNameOrderByNoDesc(String name);
+
+    List<PayrollLedger> findByOrderByNoDesc();
 
 }

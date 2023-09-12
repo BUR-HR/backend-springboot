@@ -1,16 +1,21 @@
 package com.bubblebubble.hr.payment.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.bubblebubble.hr.payment.dto.PayrollLedgerInsertRequestDTO;
 
@@ -25,6 +30,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @DynamicInsert
+@DynamicUpdate
 @ToString
 public class PayrollLedger {
     @Id
@@ -51,6 +57,11 @@ public class PayrollLedger {
     private String isClosed;
     @Column(name = "PAYMENT_TYPE")
     private String paymentType;
+    @Column(name = "COUNT")
+    private int count;
+
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "payrollLedger")
+    private List<Payroll> payrolls = new ArrayList<>();
 
     @Builder
     public PayrollLedger(int no, String name, LocalDate paymentScheduledDate, LocalDate salaryBaseStartDate,
@@ -75,5 +86,29 @@ public class PayrollLedger {
         this.paymentScheduledDate = request.getPaymentScheduledDate();
         this.paymentType = request.getPaymentType();
         this.createDate = LocalDate.now();
+    }
+
+    public void addPayroll(Payroll payroll) {
+        payrolls.add(payroll);
+    }
+
+    public void setTotalSalaryAmount(int totalSalaryAmount) {
+        this.totalSalaryAmount = totalSalaryAmount;
+    }
+
+    public void setTotalAmountTax(int totalAmountTax) {
+        this.totalAmountTax = totalAmountTax;
+    }
+
+    public void setNetIncome(int netIncome) {
+        this.netIncome = netIncome;
+    }
+
+    public void setIsClosed(String isClosed) {
+        this.isClosed = isClosed;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }

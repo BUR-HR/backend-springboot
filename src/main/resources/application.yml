@@ -29,9 +29,9 @@ spring:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: false
-        '[format_sql]': true
-      
+        # '[format_sql]': true
 
+      
 jwt:
   secret: YcDq0URXmDIeeKjYz1afWM8ReWaHzDCc5d7ccEQCXYqUlLQKSq77px/n2znavLLNNu3P+GbPzpnKMqOC/I38jQ==
 
@@ -40,6 +40,10 @@ jwt:
 logging:
   level:
     root: info
+    org:
+      hibernate:
+        SQL: debug
+        type: trace
 
 # 파일
 image:

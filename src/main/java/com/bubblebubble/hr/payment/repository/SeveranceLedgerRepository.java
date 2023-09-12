@@ -10,4 +10,6 @@ public interface SeveranceLedgerRepository extends JpaRepository<SeveranceLedger
 
     List<SeveranceLedger> findByName(String name);
 
+    List<SeveranceLedger> findByOrderByNoDesc();
+
 }
