@@ -26,14 +26,13 @@ public class EmpcardService {
         this.modelMapper = modelMapper;
         this.applicationEventPublisher = applicationEventPublisher;
     }
-
     @Transactional
     public Employee registerEmployee(EmployeeDTO employee, String temporaryPassword) {
 
+        Employee emp = empcardRepository.findById(employee.getEmpNo()).get();
         String savedPassword = passwordEncoder.encode(temporaryPassword);
-        employee.setEmployeePassword(savedPassword);// 임시 비밀번호 설정
+        emp.setEmployeePassword(savedPassword);// 임시 비밀번호 설정
         System.out.println("[registerEmployee] employee = " + employee);
-        Employee emp = empcardRepository.save(modelMapper.map(employee, Employee.class));
 
         applicationEventPublisher.publishEvent(new RegisterEmployeeEvent(emp));
 

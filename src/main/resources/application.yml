@@ -16,7 +16,7 @@ spring:
       max-request-size: 10MB
   web:
     resources:
-      static-locations: classpath:/productimgs/
+      static-locations: classpath:/static/fileimgs/
   output:
         ansi:
             enabled: always
@@ -49,6 +49,9 @@ logging:
 image:
   add-resource-locations: classpath:/static/fileimgs/
   add-resource-handler: /fileimgs/**
-
+#  add-resource-locations: classpath:/static/fileimgs/
+#  add-resource-handler: /fileimgs/**
+#
   image-dir: src/main/resources/static/fileimgs
   image-url: http://localhost:8080/fileimgs
+

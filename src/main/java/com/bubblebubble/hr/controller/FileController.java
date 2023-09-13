@@ -47,6 +47,7 @@ public class  FileController {
         return ResponseEntity.ok().body(responseDTO);
     }
 
+
     @PostMapping("/register")
     public ResponseEntity<?> registerEmployee(@ModelAttribute EmployeeDTO employeeDTO, @RequestParam("fileImgs") MultipartFile fileImgs) {
         try {

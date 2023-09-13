@@ -49,7 +49,7 @@ public class SecurityConfig {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().antMatchers("/css/**", "/js/**", "/images/**",
-                "/lib/**", "/productimgs/**");
+                "/lib/**", "/fileimgs/**");
     }
 
     /* 3. HTTP요청에 대한 권한별 설정(기존 세션 인증 -> 토큰 인증으로 변경함 :> 추가적으로 코드가 더 생김) */
@@ -67,10 +67,12 @@ public class SecurityConfig {
                 .authorizeRequests()
                     // 인사카드 등록 페이지 권한(관리자or인사팀장만 접근 및 등록 가능)
 //                    .antMatchers("/api/employees/register").hasAnyRole("ROLE_ADMIN", "ROLE_HR_LEADER")
-                    .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()   // cors를 위해 preflight 요청 처리용 option요청 허용
+//                .antMatchers("/api/file/**").hasAnyRole("ADMIN", "HR_LEADER")
+                .antMatchers("api/file/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()   // cors를 위해 preflight 요청 처리용 option요청 허용
+//                    .antMatchers("/api/file/register").hasAnyRole("ADMIN", "HR_LEADER")
                     .antMatchers("/auth/login").permitAll() // 로그인 페이지 모든 사용자 접근 허용
-                    .antMatchers("/api/file/fileimgs").permitAll()
-                    .antMatchers("/api/v1/**").permitAll()
+                    .antMatchers("/api/v1/**").permitAll() // 사원조회 페이지
                     .anyRequest().authenticated() // 모든 요청에 대해 인증 필요(ex.로그인한 사용자만 접근)
 
                 .and()
