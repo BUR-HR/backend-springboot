@@ -18,12 +18,16 @@ import com.bubblebubble.hr.attendance.dto.AttendanceStatusDTO;
 import com.bubblebubble.hr.attendance.service.AttendanceService;
 import com.bubblebubble.hr.login.dto.EmployeeDTO;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 
 
 @RestController
 @RequestMapping("/api/v1/attendance")
 @Slf4j
+@Tag(name = "Attendance", description = "출근 API")
 @PreAuthorize("hasRole('ROLE_EMPLOYEE')")
 public class AttendanceController {
 
@@ -33,31 +37,34 @@ public class AttendanceController {
         this.attendanceService = attendanceService;
     }
 
+    @Operation(summary = "출근 기록", description = "본인의 출근 기록을 조회한다.")
     @GetMapping
-    public ResponseEntity<?> getPrivateAttendanceList(@AuthenticationPrincipal EmployeeDTO employee)
-            throws AttendanceInfoNotFoundException {
+    public ResponseEntity<?> getPrivateAttendanceList(@Parameter(hidden = true) @AuthenticationPrincipal EmployeeDTO employee)
+    throws AttendanceInfoNotFoundException {
         log.info("[AttendanceController] getPrivateAttendanceList start =========================");
-
+        
         List<AttendanceDTO> attendanceList = attendanceService.getPrivateAttendanceList(employee.getEmpNo());
-
+        
         log.info("[AttendanceController] getPrivateAttendanceList end =========================");
-
+        
         return ResponseEntity.ok().body(attendanceList);
     }
-
+    
+    @Operation(summary = "출근 상태", description = "본인의 출근 상태를 조회한다.")
     @PostMapping("/status")
-    public ResponseEntity<?> getPrivateAttendanceStatus(@AuthenticationPrincipal EmployeeDTO employee) throws AttendanceInfoNotFoundException {
+    public ResponseEntity<?> getPrivateAttendanceStatus(@Parameter(hidden = true) @AuthenticationPrincipal EmployeeDTO employee) throws AttendanceInfoNotFoundException {
         log.info("[AttendanceController] getPrivateAttendanceStatus start =========================");
-
+        
         AttendanceStatusDTO attendance = attendanceService.getPrivateAttendanceStatus(employee.getEmpNo());
         log.info("[AttendanceController] getPrivateAttendanceStatus end =========================");
 
         return ResponseEntity.ok(attendance);
     }
-
+    
+    @Operation(summary = "출근", description = "출근 버튼을 누르면 출근 정보를 추가한다.")
     @PostMapping("/start")
     public ResponseEntity<?> insertAttendanceTime(
-            @AuthenticationPrincipal EmployeeDTO employee) throws Exception {
+            @Parameter(hidden = true) @AuthenticationPrincipal EmployeeDTO employee) throws Exception {
         log.info("[AttendanceController] insertAttendanceTime start =========================");
         log.info("[AttendanceController] insertAttendanceTime {}", employee);
         
@@ -72,8 +79,9 @@ public class AttendanceController {
         return ResponseEntity.ok().body(attendanceDTO);
     }
 
+    @Operation(summary = "퇴근", description = "퇴근 버튼을 누르면 출근 상태를 업데이트한다.")
     @PutMapping("/end")
-    public ResponseEntity<?> updateEndDateTime(@AuthenticationPrincipal EmployeeDTO employee)
+    public ResponseEntity<?> updateEndDateTime(@Parameter(hidden = true) @AuthenticationPrincipal EmployeeDTO employee)
             throws AttendanceInfoNotFoundException {
         log.info("[AttendanceController] updateEndDateTime start =========================");
         
@@ -88,6 +96,7 @@ public class AttendanceController {
         return ResponseEntity.ok().body(attendanceDTO);
     }
     
+    @Operation(summary = "출근 현황", description = "전직원의 출근현황을 조회한다.")
     @GetMapping(value="/list")
     @PreAuthorize("hasRole('ROLE_HR_EMPLOYEE') || hasRole('ROLE_PAYROLL') || hasRole('ROLE_HR_LEADER') || hasRole('ROLE_ADMIN')")
     public ResponseEntity<?> getAttendanceList() {

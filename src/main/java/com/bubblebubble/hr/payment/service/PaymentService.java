@@ -128,7 +128,7 @@ public class PaymentService {
         PayrollLedger payrollLedger = payrollLedgerRepository.findById(no)
                 .orElseThrow(() -> new NotFoundPayrollLedgerException("해당하는 급여대장을 찾을 수 없습니다."));
 
-        if (payrollLedger.getIsClosed() != "N") {
+        if (!payrollLedger.getIsClosed().equals("N")) {
             throw new IllegalAccessException("이미 마감된 급여대장입니다");
         }
 
@@ -159,7 +159,7 @@ public class PaymentService {
         SeveranceLedger severanceLedger = severanceLedgerRepository.findById(no)
                 .orElseThrow(() -> new NotFoundSeveranceLedgerException("해당하는 퇴직금대장을 찾을 수 없습니다."));
 
-        if (severanceLedger.getIsClosed() != "N") {
+        if (!severanceLedger.getIsClosed().equals("N")) {
             throw new IllegalAccessException("이미 마감된 급여대장입니다");
         }
 
