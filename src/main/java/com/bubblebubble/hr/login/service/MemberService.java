@@ -31,16 +31,6 @@ public class MemberService {
         this.employeeAndJobRepository = employeeAndJobRepository;
     }
 
-    // empNo를 받아서 직원 조회
-//    public EmployeeDTO selectMyInfo(String empNo) {
-//        log.info("[MemberService] selectMyInfo Start ================= ");
-//
-//        int empNoInt = Integer.parseInt(empNo); // empNo 값을 정수로 변환
-//        Employee employee = memberRepository.findByEmpNo(empNoInt);
-//        log.info("[MemberService] {} ============ ", employee);
-//        log.info("[MemberService] selectMyInfo End ============ ");
-//        return modelMapper.map(employee, EmployeeDTO.class);
-//    }
 
     // 전체 직원 목록 조회
     public List<EmployeeDTO> getAllEmployees() {

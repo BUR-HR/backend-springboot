@@ -26,7 +26,6 @@ public class EmpcardService {
         this.modelMapper = modelMapper;
         this.applicationEventPublisher = applicationEventPublisher;
     }
-
     @Transactional
     public Employee registerEmployee(EmployeeDTO employee, String temporaryPassword) {
 
