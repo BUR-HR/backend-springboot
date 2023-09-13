@@ -65,6 +65,7 @@ public class SecurityConfig {
                 .and()
                 // 권한
                 .authorizeRequests()
+                .antMatchers("/v3/**","/swagger*/**").permitAll()
                     // 인사카드 등록 페이지 권한(관리자or인사팀장만 접근 및 등록 가능)
 //                    .antMatchers("/api/employees/register").hasAnyRole("ROLE_ADMIN", "ROLE_HR_LEADER")
 //                .antMatchers("/api/file/**").hasAnyRole("ADMIN", "HR_LEADER")
@@ -88,6 +89,7 @@ public class SecurityConfig {
                 .apply(new JwtSecurityConfig(tokenProvider));
         return http.build();
     }
+
 
     /* 4. CORS(Cross-origin-resource-sharing) 설정용 Bean */
     @Bean

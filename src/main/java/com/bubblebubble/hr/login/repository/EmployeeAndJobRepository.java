@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface EmployeeAndJobRepository extends JpaRepository<EmployeeAndJob, Integer> {
 
-    List<EmployeeAndJob> findByJobJobCode(int jobCode);
+    List<EmployeeAndJob> findByJobJobCodeOrderByDeptAsc(int jobCode);
 }

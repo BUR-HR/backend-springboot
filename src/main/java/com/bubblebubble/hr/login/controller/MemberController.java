@@ -29,6 +29,7 @@ public class MemberController {
 
     }
 
+    @Operation(summary = "회원 등록", description = "회원 등록을 진행합니다.", tags = {"MemberController"})
     @PostMapping("/register")
     public ResponseEntity<ResponseDTO> registerEmployee(@RequestBody EmployeeDTO employeeDTO) {
         log.info("[RegisterController] registerEmployee start ================= ");

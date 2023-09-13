@@ -72,11 +72,11 @@ public class MemberService {
 
     public Map<String, List<EmployeeAndJobDTO>> getEmpAllList() {
 
-        List<EmployeeAndJob> tempList  = employeeAndJobRepository.findByJobJobCode(2);
+        List<EmployeeAndJob> tempList  = employeeAndJobRepository.findByJobJobCodeOrderByDeptAsc(2);
         System.out.println("tempList = " + tempList);
-        List<EmployeeAndJob> dempList =  employeeAndJobRepository.findByJobJobCode(3);
+        List<EmployeeAndJob> dempList =  employeeAndJobRepository.findByJobJobCodeOrderByDeptAsc(3);
         System.out.println("dempList = " + dempList);
-        List<EmployeeAndJob> empList = employeeAndJobRepository.findByJobJobCode(4);
+        List<EmployeeAndJob> empList = employeeAndJobRepository.findByJobJobCodeOrderByDeptAsc(4);
         System.out.println("empList = " + empList);
 
         List<EmployeeAndJobDTO> tempDTO = tempList.stream().map(temp -> modelMapper.map(temp, EmployeeAndJobDTO.class)).collect(Collectors.toList());
