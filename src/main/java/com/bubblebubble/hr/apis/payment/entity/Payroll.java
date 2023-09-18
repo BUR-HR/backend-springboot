@@ -3,11 +3,14 @@ package com.bubblebubble.hr.apis.payment.entity;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
+
+import com.bubblebubble.hr.apis.login.member.entity.EmployeeAndJob;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +24,14 @@ import lombok.ToString;
 @DynamicInsert
 public class Payroll {
     @EmbeddedId
-    private PayrollPK paymentNo;
+    private PayrollPK payroll;
 
     @ManyToOne
     @JoinColumn(name = "PAYROLL_NO", insertable = false, updatable = false)
     private PayrollLedger payrollLedger;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "EMP_NO", insertable = false, updatable = false)
+    private EmployeeAndJob employeeAndJob;
     @Column(name = "SALARY")
     private int salary;
     @Column(name = "OVERTIME_PAY")
@@ -47,8 +53,8 @@ public class Payroll {
     @Column(name = "MEAL_ALLOWANCE")
     private int mealAllowance;
     
-    public Payroll(PayrollPK paymentNo, int salary) {
-        this.paymentNo = paymentNo;
+    public Payroll(PayrollPK payroll, int salary) {
+        this.payroll = payroll;
         this.salary = salary;
     }
 

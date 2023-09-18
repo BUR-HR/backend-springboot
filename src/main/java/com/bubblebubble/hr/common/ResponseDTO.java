@@ -1,9 +1,10 @@
 package com.bubblebubble.hr.common;
 
+import org.springframework.http.HttpStatus;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter

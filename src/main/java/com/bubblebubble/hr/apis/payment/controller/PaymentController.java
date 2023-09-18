@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bubblebubble.hr.apis.payment.dto.PayrollLedgerInsertRequestDTO;
 import com.bubblebubble.hr.apis.payment.dto.PayrollLedgerResponseDTO;
+import com.bubblebubble.hr.apis.payment.dto.PayrollViewDTO;
 import com.bubblebubble.hr.apis.payment.dto.SeveranceLedgerInsertRequestDTO;
 import com.bubblebubble.hr.apis.payment.dto.SeveranceLedgerResponseDTO;
 import com.bubblebubble.hr.apis.payment.service.PaymentService;
@@ -43,7 +44,7 @@ public class PaymentController {
     }
 
     @Operation(method = "GET", summary = "급여대장 조회", description = "급여대장을 조회한다.")
-    @GetMapping("payroll")
+    @GetMapping("payroll/list")
     public ResponseEntity<?> getPayrollList(@Parameter(description = "대장명칭", required = false) String name) {
         log.info("[PaymentController] getPayrollList start");
         log.info("name {}", name);
@@ -52,6 +53,13 @@ public class PaymentController {
         log.info("[PaymentController] getPayrollList end");
         return ResponseEntity.ok().body(response);
     };
+
+    @GetMapping("payroll")
+    public ResponseEntity<?> getPayrollList(Integer no) {
+
+        List<PayrollViewDTO> response = paymentService.selectPayroll(no);
+        return ResponseEntity.ok().body(response);
+    }
 
     @Operation(method = "POST", summary = "급여대장 추가", description = "급여대장을 추가한다.")
     @PostMapping("payroll")

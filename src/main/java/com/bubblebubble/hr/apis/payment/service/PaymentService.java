@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bubblebubble.hr.apis.payment.dto.PayrollLedgerInsertRequestDTO;
 import com.bubblebubble.hr.apis.payment.dto.PayrollLedgerResponseDTO;
+import com.bubblebubble.hr.apis.payment.dto.PayrollViewDTO;
 import com.bubblebubble.hr.apis.payment.dto.SeveranceLedgerInsertRequestDTO;
 import com.bubblebubble.hr.apis.payment.dto.SeveranceLedgerResponseDTO;
 import com.bubblebubble.hr.apis.payment.entity.EmployeeSalary;
@@ -184,6 +187,12 @@ public class PaymentService {
 
         return severanceLedgers.stream().map(item -> modelMapper.map(item, SeveranceLedgerResponseDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    public List<PayrollViewDTO> selectPayroll(Integer no) {
+        log.info("dsaifwjeinbjfdfnbvjksdfs");
+        List<Payroll> payrolls = payrollRepository.findByPayrollPayrollNo(no, Sort.by(Direction.ASC, "payrollEmpNo"));
+        return payrolls.stream().map(PayrollViewDTO::new).collect(Collectors.toList());
     }
 
 }
