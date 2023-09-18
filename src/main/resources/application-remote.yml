@@ -36,8 +36,21 @@ spring:
 jwt:
   secret: YcDq0URXmDIeeKjYz1afWM8ReWaHzDCc5d7ccEQCXYqUlLQKSq77px/n2znavLLNNu3P+GbPzpnKMqOC/I38jQ==
 
-
 # Logging Level
 logging:
   level:
     root: info
+    org:
+      hibernate:
+        SQL: debug
+        type: trace
+
+# 파일
+image:
+  add-resource-locations: classpath:/static/fileimgs/
+  add-resource-handler: /fileimgs/**
+#  add-resource-locations: classpath:/static/fileimgs/
+#  add-resource-handler: /fileimgs/**
+#
+  image-dir: src/main/resources/static/fileimgs
+  image-url: http://localhost:8080/fileimgs
