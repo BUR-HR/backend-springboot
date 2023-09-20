@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -57,39 +59,37 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf().disable()
-                .exceptionHandling()
-                /* 기본 시큐리티 설정에서 JWT 토큰과 관련된 유효성과 권한 체크용 설정*/
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)//  필요한 권한 없이 접근(403)
-                .accessDeniedHandler(jwtAccessDeniedHandler) // 유효한 자격 증명 없을 시(401)
-                .and()
+        http.csrf(CsrfConfigurer::disable)
+                .exceptionHandling(exception -> {
+                    /* 기본 시큐리티 설정에서 JWT 토큰과 관련된 유효성과 권한 체크용 설정*/
+                    exception.authenticationEntryPoint(jwtAuthenticationEntryPoint);//  필요한 권한 없이 접근(403)
+                    exception.accessDeniedHandler(jwtAccessDeniedHandler); // 유효한 자격 증명 없을 시(401)
+                })
                 // 권한
-                .authorizeRequests()
-                .antMatchers("/v3/**","/swagger*/**").permitAll()
-                    // 인사카드 등록 페이지 권한(관리자or인사팀장만 접근 및 등록 가능)
-//                    .antMatchers("/api/employees/register").hasAnyRole("ROLE_ADMIN", "ROLE_HR_LEADER")
-//                .antMatchers("/api/file/**").hasAnyRole("ADMIN", "HR_LEADER")
-                .antMatchers("api/file/**").permitAll()
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()   // cors를 위해 preflight 요청 처리용 option요청 허용
-//                    .antMatchers("/api/file/register").hasAnyRole("ADMIN", "HR_LEADER")
-                    .antMatchers("/auth/login").permitAll() // 로그인 페이지 모든 사용자 접근 허용
-                    .antMatchers("/api/v1/**").permitAll() // 사원조회 페이지
-                    .anyRequest().authenticated() // 모든 요청에 대해 인증 필요(ex.로그인한 사용자만 접근)
+                .authorizeRequests(auth -> {
 
-                .and()
+                    auth.antMatchers("/v3/**", "/swagger*/**").permitAll();
+                    // 인사카드 등록 페이지 권한(관리자or인사팀장만 접근 및 등록 가능)
+                    //                    .antMatchers("/api/employees/register").hasAnyRole("ROLE_ADMIN", "ROLE_HR_LEADER")
+                    //                .antMatchers("/api/file/**").hasAnyRole("ADMIN", "HR_LEADER")
+                    auth.antMatchers("api/file/**").permitAll();
+                    auth.antMatchers(HttpMethod.OPTIONS, "/**").permitAll(); // cors를 위해 preflight 요청 처리용 option요청 허용
+                    //                    .antMatchers("/api/file/register").hasAnyRole("ADMIN", "HR_LEADER")
+                    auth.antMatchers("/auth/login").permitAll(); // 로그인 페이지 모든 사용자 접근 허용
+                    auth.antMatchers("/api/v1/**").permitAll(); // 사원조회 페이지
+                    auth.anyRequest().authenticated(); // 모든 요청에 대해 인증 필요(ex.로그인한 사용자만 접근)
+                })
 
                 /* 세션 인증 방식을 쓰지 않겠다는 설정 */
                 // JWT 토큰 방식을 사용하므로 세션을 사용하지 않도록 설정
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .cors()
-                .and()
+                .sessionManagement(session -> {
+                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                })
+                .cors(CorsConfigurer::and)
                 /* jwt토큰 방식을 쓰겠다는 설정*/
                 .apply(new JwtSecurityConfig(tokenProvider));
         return http.build();
     }
-
 
     /* 4. CORS(Cross-origin-resource-sharing) 설정용 Bean */
     @Bean
@@ -100,6 +100,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "DELETE")); // 어떤 HTTP 메서드를 사용한 요청을 허용할 것인지를 지정
         configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Content-type" // 어떤 HTTP 헤더를 사용한 요청을 허용할 것인지를 지정
                 , "Access-Control-Allow-Headers", "Authorization", "X-Requested-With"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
 

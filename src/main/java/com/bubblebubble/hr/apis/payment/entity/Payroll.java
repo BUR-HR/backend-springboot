@@ -3,7 +3,6 @@ package com.bubblebubble.hr.apis.payment.entity;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -29,7 +28,7 @@ public class Payroll {
     @ManyToOne
     @JoinColumn(name = "PAYROLL_NO", insertable = false, updatable = false)
     private PayrollLedger payrollLedger;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "EMP_NO", insertable = false, updatable = false)
     private EmployeeAndJob employeeAndJob;
     @Column(name = "SALARY")

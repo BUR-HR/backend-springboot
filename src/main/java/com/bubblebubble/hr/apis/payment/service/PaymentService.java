@@ -191,7 +191,7 @@ public class PaymentService {
 
     public List<PayrollViewDTO> selectPayroll(Integer no) {
         log.info("dsaifwjeinbjfdfnbvjksdfs");
-        List<Payroll> payrolls = payrollRepository.findByPayrollPayrollNo(no, Sort.by(Direction.ASC, "payrollEmpNo"));
+        List<Payroll> payrolls = payrollRepository.findByPayrollNo(no);
         return payrolls.stream().map(PayrollViewDTO::new).collect(Collectors.toList());
     }
 

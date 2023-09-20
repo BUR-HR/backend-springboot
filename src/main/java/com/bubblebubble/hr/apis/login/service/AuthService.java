@@ -1,17 +1,26 @@
 package com.bubblebubble.hr.apis.login.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.bubblebubble.hr.apis.login.dto.EmployeeDTO;
 import com.bubblebubble.hr.apis.login.dto.TokenDTO;
 import com.bubblebubble.hr.apis.login.member.entity.Employee;
+import com.bubblebubble.hr.apis.login.member.entity.EmployeeRole;
 import com.bubblebubble.hr.apis.login.repository.MemberRepository;
 import com.bubblebubble.hr.exception.LoginFailedException;
 import com.bubblebubble.hr.jwt.TokenProvider;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.modelmapper.ModelMapper;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -37,7 +46,8 @@ public class AuthService {
     }
 
     // 로그인 작업 수행
-    public Object login(EmployeeDTO employeeDTO) { // MemberDTO 객체로 받은 로그인 정보를 처리
+    @Transactional
+    public Object login(EmployeeDTO employeeDTO, HttpServletResponse response) { // MemberDTO 객체로 받은 로그인 정보를 처리
 
         log.info("[AuthService] login Start ==================================");
         log.info("[AuthService] {} ================== ", employeeDTO);
@@ -59,12 +69,19 @@ public class AuthService {
         }
 
         /* 3. 토큰 발급 */
-        TokenDTO tokenDTO = tokenProvider.generateTokenDTO(employee);
-        log.info("[AuthService] tokenDTO {} =======> ", tokenDTO);
+        TokenDTO tokenDTO = tokenProvider.generateTokenDTO(employee, response);
 
+        log.info("[AuthService] tokenDTO {} =======> ", tokenDTO);
         log.info("[AuthService] login End ==================================");
 
         return tokenDTO;   // 로그인 성공 시 토큰을 생성하여 TokenDTO 객체로 반환
+    }
+
+    public Object reissuanceAccessToken(EmployeeDTO employeeDTO) {
+        Employee employee = memberRepository.findByEmpNo(employeeDTO.getEmpNo());
+
+        TokenDTO accessToken = tokenProvider.reissuanceAccessToken(employee);
+        return accessToken;
     }
 
 

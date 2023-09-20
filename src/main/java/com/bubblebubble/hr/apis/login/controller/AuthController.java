@@ -1,8 +1,10 @@
 package com.bubblebubble.hr.apis.login.controller;
 
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +24,7 @@ public class AuthController {
 
     private final AuthService authService;
 
-    public AuthController(AuthService authService){
+    public AuthController(AuthService authService) {
         this.authService = authService;
     }
 
@@ -30,15 +32,21 @@ public class AuthController {
      *  매핑해 객체로 받아낸다(회원 아이디, 비밀번호)
      * */
     @PostMapping("/login")
-    public ResponseEntity<ResponseDTO> login(@RequestBody EmployeeDTO memberDTO){
+    public ResponseEntity<ResponseDTO> login(@RequestBody EmployeeDTO memberDTO, HttpServletResponse response) {
         log.info("[login] start =========");
+        Object accessTokenDTO = authService.login(memberDTO, response);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(new ResponseDTO(HttpStatus.OK, "로그인 성공", authService.login(memberDTO)));
+                .body(new ResponseDTO(HttpStatus.OK, "로그인 성공", accessTokenDTO));
     }
 
+    @PostMapping("/reissue")
+    public ResponseEntity<ResponseDTO> reissue(@AuthenticationPrincipal EmployeeDTO employeeDTO) {
+        Object accessTokenDTO = authService.reissuanceAccessToken(employeeDTO);
 
-
-
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new ResponseDTO(HttpStatus.OK, "AccessToken 재발급 성공", accessTokenDTO));
+    }
 }
