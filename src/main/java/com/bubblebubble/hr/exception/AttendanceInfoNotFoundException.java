@@ -1,4 +1,4 @@
-package com.bubblebubble.hr.apis.attendance.controller;
+package com.bubblebubble.hr.exception;
 
 public class AttendanceInfoNotFoundException extends Exception {
 

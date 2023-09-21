@@ -1,7 +1,6 @@
 package com.bubblebubble.hr.exception;
 
 
-import com.bubblebubble.hr.apis.attendance.controller.AttendanceInfoNotFoundException;
 import com.bubblebubble.hr.exception.dto.ApiExceptionDTO;
 
 import org.springframework.http.HttpStatus;

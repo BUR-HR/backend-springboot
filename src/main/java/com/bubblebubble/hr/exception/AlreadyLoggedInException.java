@@ -1,4 +1,4 @@
-package com.bubblebubble.hr.apis.attendance.service;
+package com.bubblebubble.hr.exception;
 
 public class AlreadyLoggedInException extends Exception {
 

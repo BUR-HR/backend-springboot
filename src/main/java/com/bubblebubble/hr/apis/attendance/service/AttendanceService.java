@@ -13,11 +13,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bubblebubble.hr.apis.attendance.controller.AttendanceInfoNotFoundException;
 import com.bubblebubble.hr.apis.attendance.dto.AttendanceDTO;
 import com.bubblebubble.hr.apis.attendance.dto.AttendanceStatusDTO;
 import com.bubblebubble.hr.apis.attendance.entity.Attendance;
 import com.bubblebubble.hr.apis.attendance.repository.AttendanceRepository;
+import com.bubblebubble.hr.exception.AttendanceInfoNotFoundException;
 
 import lombok.extern.slf4j.Slf4j;
 

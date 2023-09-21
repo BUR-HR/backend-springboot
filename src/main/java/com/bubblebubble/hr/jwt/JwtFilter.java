@@ -90,7 +90,6 @@ public class JwtFilter extends OncePerRequestFilter {
         if (cookies == null) return null;
 
         for (Cookie cookie : cookies) {
-            log.info("test {}",cookie);
             if (cookie.getName().equals("refreshToken")) {
                 return cookie.getValue();
             }

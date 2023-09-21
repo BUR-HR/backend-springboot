@@ -17,6 +17,7 @@ import com.bubblebubble.hr.apis.attendance.dto.AttendanceDTO;
 import com.bubblebubble.hr.apis.attendance.dto.AttendanceStatusDTO;
 import com.bubblebubble.hr.apis.attendance.service.AttendanceService;
 import com.bubblebubble.hr.apis.login.dto.EmployeeDTO;
+import com.bubblebubble.hr.exception.AttendanceInfoNotFoundException;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
