@@ -3,9 +3,9 @@ package com.bubblebubble.hr.apis.payment.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bubblebubble.hr.apis.payment.dto.RegisterEmployeeEvent;
 import com.bubblebubble.hr.apis.payment.entity.EmployeeSalary;
 import com.bubblebubble.hr.apis.payment.entity.JobSalary;
+import com.bubblebubble.hr.apis.payment.event.RegisterEmployeeEvent;
 import com.bubblebubble.hr.apis.payment.repository.EmployeeSalaryRepository;
 import com.bubblebubble.hr.apis.payment.repository.JobSalaryRepository;
 

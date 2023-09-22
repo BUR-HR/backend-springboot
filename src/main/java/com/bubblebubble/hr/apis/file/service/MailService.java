@@ -14,7 +14,7 @@ public class MailService {
         this.javaMailSender = javaMailSender;
     }
 
-    public void sendEmail(String email, String empNo, String temporaryPassword) {
+    public void sendEmail(String email, int empNo, String temporaryPassword) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -22,7 +22,7 @@ public class MailService {
             helper.setFrom("zixuuxiz@naver.com", "BUR-HR");
             helper.setTo(email);
             helper.setSubject("등록하신 직원의 계정 정보 입니다.");
-
+            
             String emailContent = "<html>" +
                     "<head>" +
                     "<style>" +
@@ -60,6 +60,5 @@ public class MailService {
             System.out.println("Error sending email: " + e.getMessage());
         }
     }
-
 
 }

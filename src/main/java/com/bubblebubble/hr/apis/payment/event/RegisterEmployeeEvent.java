@@ -1,4 +1,4 @@
-package com.bubblebubble.hr.apis.payment.dto;
+package com.bubblebubble.hr.apis.payment.event;
 
 import com.bubblebubble.hr.apis.login.member.entity.Employee;
 

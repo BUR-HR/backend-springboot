@@ -25,5 +25,5 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
         List<Attendance> findByEmpNoAndStartDateTimeBetweenOrderByNoDesc(int empNo, LocalDateTime startOfWeek,
                         LocalDateTime endOfWeek);
 
-        Optional<Attendance> findTopByEmpNoAndEndDateTimeIsNull(int empNo);
+        Optional<Attendance> findTopByEmpNoAndEndDateTimeIsNullOrderByNo(int empNo);
 }

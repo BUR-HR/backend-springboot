@@ -49,7 +49,7 @@ public class AttendanceService {
     public AttendanceDTO updateEndDateTime(AttendanceDTO attendanceDTO) throws AttendanceInfoNotFoundException {
         log.info("[AttendanceService] updateEndDateTime start =========================");
         Attendance attendance = attendanceRepository
-                .findTopByEmpNoAndEndDateTimeIsNull(attendanceDTO.getEmpNo())
+                .findTopByEmpNoAndEndDateTimeIsNullOrderByNo(attendanceDTO.getEmpNo())
                 .orElseThrow(() -> new AttendanceInfoNotFoundException("출근 정보가 존재하지 않습니다."));
 
         attendance.setEndDateTime(attendanceDTO.getEndDateTime());

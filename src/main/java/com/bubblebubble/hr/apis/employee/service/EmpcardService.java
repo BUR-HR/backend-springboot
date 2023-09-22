@@ -2,7 +2,6 @@ package com.bubblebubble.hr.apis.employee.service;
 
 import java.util.Random;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,21 +10,21 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bubblebubble.hr.apis.employee.repository.EmpcardRepository;
 import com.bubblebubble.hr.apis.login.dto.EmployeeDTO;
 import com.bubblebubble.hr.apis.login.member.entity.Employee;
-import com.bubblebubble.hr.apis.payment.dto.RegisterEmployeeEvent;
+import com.bubblebubble.hr.apis.payment.event.RegisterEmployeeEvent;
+import com.bubblebubble.hr.apis.payment.event.SendEmailEvent;
 
 @Service
 public class EmpcardService {
     private final EmpcardRepository empcardRepository;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final ModelMapper modelMapper;
 
-    public EmpcardService(EmpcardRepository empcardRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, ApplicationEventPublisher applicationEventPublisher) {
+    public EmpcardService(EmpcardRepository empcardRepository, PasswordEncoder passwordEncoder, ApplicationEventPublisher applicationEventPublisher) {
         this.empcardRepository = empcardRepository;
         this.passwordEncoder = passwordEncoder;
-        this.modelMapper = modelMapper;
         this.applicationEventPublisher = applicationEventPublisher;
     }
+    
     @Transactional
     public Employee registerEmployee(EmployeeDTO employee, String temporaryPassword) {
 
@@ -33,8 +32,10 @@ public class EmpcardService {
         String savedPassword = passwordEncoder.encode(temporaryPassword);
         emp.setEmployeePassword(savedPassword);// 임시 비밀번호 설정
         System.out.println("[registerEmployee] employee = " + employee);
+        employee.setEmpNo(emp.getEmpNo());
 
         applicationEventPublisher.publishEvent(new RegisterEmployeeEvent(emp));
+        applicationEventPublisher.publishEvent(new SendEmailEvent(emp, temporaryPassword));
 
         return emp;
     }

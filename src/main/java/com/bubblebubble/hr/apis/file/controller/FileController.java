@@ -3,6 +3,7 @@ package com.bubblebubble.hr.apis.file.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,18 +30,14 @@ public class  FileController {
 
     private final FileService fileService;
 
-    private EmpcardService empcardService;
+    private final EmpcardService empcardService;
+
+    private final PasswordEncoder passwordEncoder;
 
 
-    private MailService mailService;
-
-    private PasswordEncoder passwordEncoder;
-
-
-    public FileController(FileService fileService, EmpcardService empcardService,MailService mailService,PasswordEncoder passwordEncoder) {
+    public FileController(FileService fileService, EmpcardService empcardService, PasswordEncoder passwordEncoder) {
         this.fileService = fileService;
         this.empcardService = empcardService;
-        this.mailService = mailService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -72,15 +69,11 @@ public class  FileController {
 
             // 이메일
             Employee registeredEmployee = empcardService.registerEmployee(employeeDTO, temporaryPassword);
-            Map<String, Object> responseMap = new HashMap<>();
-            responseMap.put("empNo", registeredEmployee.getEmpNo());
-            responseMap.put("tempPass", temporaryPassword);
 
-            String email = employeeDTO.getEmployeeEmail();
-
-            mailService.sendEmail(email, String.valueOf(registeredEmployee.getEmpNo()), temporaryPassword);
-
-            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원가입 성공", responseMap));
+            if (registeredEmployee == null) {
+                throw new Exception();
+            }
+            return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원가입 성공", null));
 
         } catch (Exception e) {
             System.out.println("An error occurred during employee registration: " + e.getMessage());
@@ -88,5 +81,6 @@ public class  FileController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("직원 등록에 실패하였습니다.");
         }
     }
+    
 }
 
