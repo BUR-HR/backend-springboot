@@ -1,8 +1,12 @@
 package com.bubblebubble.hr.apis.login.service;
 
-import lombok.extern.slf4j.Slf4j;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,8 +17,7 @@ import com.bubblebubble.hr.apis.login.member.entity.EmployeeAndJob;
 import com.bubblebubble.hr.apis.login.repository.EmployeeAndJobRepository;
 import com.bubblebubble.hr.apis.login.repository.MemberRepository;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -25,7 +28,6 @@ public class MemberService {
 
     private final EmployeeAndJobRepository employeeAndJobRepository;
 
-    @Autowired
     public MemberService(MemberRepository memberRepository, ModelMapper modelMapper,EmployeeAndJobRepository employeeAndJobRepository) {
         this.memberRepository = memberRepository;
         this.modelMapper = modelMapper;

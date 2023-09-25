@@ -1,9 +1,5 @@
 package com.bubblebubble.hr.apis.file.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,16 +12,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.bubblebubble.hr.apis.employee.service.EmpcardService;
 import com.bubblebubble.hr.apis.file.service.FileService;
-import com.bubblebubble.hr.apis.file.service.MailService;
 import com.bubblebubble.hr.apis.login.dto.EmployeeDTO;
 import com.bubblebubble.hr.apis.login.member.entity.Employee;
 import com.bubblebubble.hr.common.ResponseDTO;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RestController
 @RequestMapping("/api/file")
-@Slf4j
 public class  FileController {
 
     private final FileService fileService;

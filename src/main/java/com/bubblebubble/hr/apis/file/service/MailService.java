@@ -1,7 +1,6 @@
 package com.bubblebubble.hr.apis.file.service;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;

@@ -1,14 +1,15 @@
 package com.bubblebubble.hr.apis.login.dto;
 
-import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+import java.util.Date;
 
 import com.bubblebubble.hr.apis.login.member.entity.Department;
 import com.bubblebubble.hr.apis.login.member.entity.Job;
 
-import javax.persistence.*;
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 
 @NoArgsConstructor

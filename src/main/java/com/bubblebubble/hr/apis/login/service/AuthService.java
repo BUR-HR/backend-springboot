@@ -1,11 +1,7 @@
 package com.bubblebubble.hr.apis.login.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletResponse;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,13 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.bubblebubble.hr.apis.login.dto.EmployeeDTO;
 import com.bubblebubble.hr.apis.login.dto.TokenDTO;
 import com.bubblebubble.hr.apis.login.member.entity.Employee;
-import com.bubblebubble.hr.apis.login.member.entity.EmployeeRole;
 import com.bubblebubble.hr.apis.login.repository.MemberRepository;
 import com.bubblebubble.hr.exception.LoginFailedException;
 import com.bubblebubble.hr.jwt.TokenProvider;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
@@ -32,17 +25,14 @@ public class AuthService {
 
     private final TokenProvider tokenProvider;
 
-    private final ModelMapper modelMapper;
 
 
     public AuthService(MemberRepository memberRepository
                         , PasswordEncoder passwordEncoder
-                        , TokenProvider tokenProvider
-                        , ModelMapper modelMapper){
+                        , TokenProvider tokenProvider){
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
-        this.modelMapper = modelMapper;
     }
 
     // 로그인 작업 수행
