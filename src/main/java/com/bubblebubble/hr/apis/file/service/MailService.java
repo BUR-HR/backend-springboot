@@ -163,8 +163,8 @@ public class MailService {
             temp = Files.write(temp, content.getBytes("UTF-8"));
             helper.addAttachment("급여명세서.html", temp.toFile());
     
-            Files.delete(temp);
             javaMailSender.send(message);
+            Files.delete(temp);
         }
     }
 }
