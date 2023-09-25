@@ -19,5 +19,4 @@ public interface PayrollRepository extends JpaRepository<Payroll, PayrollPK> {
             "WHERE p.payroll.payrollNo = :no " +
             "ORDER by p.payroll.payrollNo asc")
     List<Payroll> findByPayrollNo(@Param("no") Integer no);
-    
 }

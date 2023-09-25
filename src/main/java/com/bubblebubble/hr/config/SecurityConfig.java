@@ -1,6 +1,7 @@
 package com.bubblebubble.hr.config;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
@@ -72,7 +73,8 @@ public class SecurityConfig {
                     // 인사카드 등록 페이지 권한(관리자or인사팀장만 접근 및 등록 가능)
                     //                    .antMatchers("/api/employees/register").hasAnyRole("ROLE_ADMIN", "ROLE_HR_LEADER")
                     //                .antMatchers("/api/file/**").hasAnyRole("ADMIN", "HR_LEADER")
-                    auth.antMatchers("api/file/**").permitAll();
+                    auth.antMatchers("/api/file/**").permitAll();
+                    auth.antMatchers( "/api/mail/**").permitAll();
                     auth.antMatchers(HttpMethod.OPTIONS, "/**").permitAll(); // cors를 위해 preflight 요청 처리용 option요청 허용
                     //                    .antMatchers("/api/file/register").hasAnyRole("ADMIN", "HR_LEADER")
                     auth.antMatchers("/auth/login").permitAll(); // 로그인 페이지 모든 사용자 접근 허용
@@ -102,8 +104,15 @@ public class SecurityConfig {
                 , "Access-Control-Allow-Headers", "Authorization", "X-Requested-With"));
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        
+        CorsConfiguration paymentEmailConf = new CorsConfiguration();
+        paymentEmailConf.setAllowedOrigins(List.of("*"));
+        paymentEmailConf.setAllowedMethods(List.of("POST"));
+        paymentEmailConf.setAllowedHeaders(List.of("Access-Control-Allow-Origin"));
+        paymentEmailConf.setAllowCredentials(false);
+        
+        source.registerCorsConfiguration("/api/mail/payment", paymentEmailConf);
         source.registerCorsConfiguration("/**", configuration);
-
         return source;
     }
 
